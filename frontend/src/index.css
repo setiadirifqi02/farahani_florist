@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Lora";
+  src: url("/fonts/Lora/Lora-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@layer components {
+  .headingTitle {
+    @apply text-2xl lg:text-4xl  font-bold  font-lora;
+  }
+
+  .subHeadingTitle {
+    @apply text-lg md:text-lg  font-bold font-lora;
+  }
+
+  .subTitle {
+    @apply text-sm lg:text-lg font-poppins font-bold leading-relaxed text-gray-600 mt-5;
+  }
+
+  .content {
+    @apply p-3 md:p-10;
+  }
+
+  .paragraph {
+    @apply font-poppins leading-relaxed lg:text-xl;
+  }
+
+  .paragraphDetail {
+    @apply text-sm lg:text-lg font-poppins leading-relaxed text-gray-600;
+  }
+
+  .flexCenter {
+    @apply flex items-center justify-center;
+  }
+}
+
+.pagination {
+  display: flex;
+  gap: 5px;
+  box-sizing: border-box;
+}
+
+/* Pagination */
+.page-item.active .page-link {
+  color: #ffff;
+  background-color: #ffff;
+  color: #22c55e;
+  border: 1px solid #22c55e;
+}
+
+.page-link {
+  font-size: 12px;
+  color: white;
+  display: flex;
+  background-color: #22c55e;
+  padding: 5px 15px;
+  border-radius: 8px;
+  transition: ease-in-out all 0.4s;
+  box-sizing: border-box;
+}
+
+.page-link:hover {
+  color: #ffff;
+  background-color: #ffff;
+  color: #22c55e;
+  border: 1px solid #22c55e;
+}
