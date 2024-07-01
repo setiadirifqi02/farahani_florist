@@ -11,6 +11,7 @@ import MetaData from "../layout/MetaData";
 import { useMyOrdersQuery } from "../../redux/api/orderApi";
 import { useDispatch } from "react-redux";
 import { clearCartItem } from "../../redux/features/cartSlice";
+import { showFormattedDate } from "../../helpers/helpers";
 
 const MyOrders = () => {
   const { data, isLoading, error } = useMyOrdersQuery();
@@ -21,7 +22,9 @@ const MyOrders = () => {
 
   const orderSuccess = searchParams.get("order_success");
 
-  // console.log(order);
+  // {
+  //   data?.orders.map((item) => console.log(item?.orderStatus));
+  // }
 
   useEffect(() => {
     if (error) {
@@ -40,6 +43,7 @@ const MyOrders = () => {
     {
       name: "ID",
       selector: (row) => row._id,
+      sortable: true,
     },
     {
       name: "Dibayar",
@@ -52,6 +56,15 @@ const MyOrders = () => {
     {
       name: "Status Pesanan",
       selector: (row) => row.orderStatus,
+      sortable: true,
+    },
+    {
+      name: "Date",
+      selector: (row) => showFormattedDate(row?.updatedAt),
+    },
+    {
+      name: "Konfirmasi",
+      selector: (row) => row.isConfirmedByUser,
     },
     {
       name: "Action",

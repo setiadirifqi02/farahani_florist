@@ -16,7 +16,7 @@ const UserLayout = ({ children }) => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div className="user___layout p-10 md:content flex flex-col  w-full md:min-w-[800px] lg:max-w-[800px]">
+    <div className="user___layout p-4 md:content flex flex-col  w-full md:min-w-[800px] lg:max-w-[800px]">
       <h1 className="headingTitle text-default-600 text-center">
         User Setting
       </h1>

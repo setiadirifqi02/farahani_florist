@@ -77,7 +77,9 @@ const UpdateProduct = () => {
 
         <div className="update-product__page flex flex-col w-full">
           <form onSubmit={onSubmitHandler}>
-            <h2 className="subHeadingTitle">Edit Produk </h2>
+            <div>
+              <h2 className="subHeadingTitle">Edit Produk </h2>
+            </div>
             <h2 className="subTitle mb-4">Nama Produk</h2>
 
             <Input

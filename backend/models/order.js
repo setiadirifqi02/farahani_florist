@@ -98,6 +98,15 @@ const orderSchema = new mongoose.Schema(
       default: "Processing",
     },
     deliveredAt: Date,
+    isConfirmedByUser: {
+      type: String,
+      enum: {
+        values: ["Dikonfirmasi", "Belum Konfirmasi"],
+        message:
+          "Pilih konfirmasi pesanan: Belum Konfirmasi atau Dikonfirmasi!",
+      },
+      default: "Belum Konfirmasi",
+    },
   },
   {
     timestamps: true,

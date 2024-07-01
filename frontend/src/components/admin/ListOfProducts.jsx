@@ -1,9 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
+import { CSVDownload, CSVLink } from "react-csv";
 
-import { Spinner, Tooltip } from "@nextui-org/react";
-import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { Button, Spinner, Tooltip } from "@nextui-org/react";
+import {
+  CloudArrowDownIcon,
+  PencilIcon,
+  PhotoIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 
 import AdminLayout from "../layout/AdminLayout";
@@ -13,6 +19,7 @@ import {
   useDeleteProductMutation,
   useGetAdminProductsQuery,
 } from "../../redux/api/productsApi";
+import { showFormattedDate } from "../../helpers/helpers";
 
 const ListOfProducts = () => {
   const { data, isLoading, error } = useGetAdminProductsQuery();
@@ -48,14 +55,29 @@ const ListOfProducts = () => {
     {
       name: "ID",
       selector: (row) => row._id,
+      width: "240px",
     },
     {
       name: "Nama Produk",
       selector: (row) => row.name,
+      sortable: true,
+      width: "200px",
     },
     {
       name: "Stock",
       selector: (row) => row.stock,
+      sortable: true,
+      width: "100px",
+    },
+    {
+      name: "Input by",
+      selector: (row) => row?.user?.email,
+      width: "200px",
+    },
+    {
+      name: "Date",
+      selector: (row) => showFormattedDate(row?.updatedAt),
+      width: "200px",
     },
 
     {
@@ -107,14 +129,47 @@ const ListOfProducts = () => {
     },
   ];
 
+  const headers = [
+    { label: "ID", key: "_id" },
+    { label: "Name", key: "name" },
+    { label: "Harga", key: "price" },
+    { label: "Stok", key: "stock" },
+    { label: "Warna", key: "color" },
+    { label: "Input by", key: "user.email" },
+  ];
+
   return (
     <>
       <MetaData title="Daftar produk" />
       <AdminLayout>
-        <div className="list-product___page flex flex-col overflow-clip lg:overflow-visible">
-          <h2 className="subHeadingTitle capitalize py-3">
-            Daftar Produk: {data?.products?.length}
-          </h2>
+        <div className="list-product___page flex flex-col overflow-scroll lg:overflow-scroll">
+          <div className="flex w-full justify-between items-center lg:pr-2">
+            <h2 className="subHeadingTitle capitalize py-3">
+              Daftar Produk: {data?.products?.length}
+            </h2>
+
+            {/* Export to csv button */}
+            {data?.products ? (
+              <CSVLink
+                data={data?.products}
+                headers={headers}
+                filename="Data Produk Farhani Florist"
+              >
+                <Button
+                  variant="light"
+                  className="font-poppins"
+                  startContent={
+                    <CloudArrowDownIcon className="h-4 text-blue-500 " />
+                  }
+                >
+                  Download CSV
+                </Button>
+              </CSVLink>
+            ) : (
+              <></>
+            )}
+          </div>
+
           <DataTable
             className="font-poppins"
             columns={columns}

@@ -2,8 +2,12 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 
-import { Spinner, Tooltip } from "@nextui-org/react";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { Button, Spinner, Tooltip } from "@nextui-org/react";
+import {
+  CloudArrowDownIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 
 import toast from "react-hot-toast";
 
@@ -13,6 +17,9 @@ import {
   useDeleteOrderMutation,
   useGetOrdersByAdminQuery,
 } from "../../redux/api/orderApi";
+
+import { showFormattedDate } from "../../helpers/helpers";
+import { CSVLink } from "react-csv";
 
 const ListOfOrders = () => {
   const { data, isLoading, error } = useGetOrdersByAdminQuery();
@@ -44,14 +51,33 @@ const ListOfOrders = () => {
     {
       name: "ID",
       selector: (row) => row?._id,
+      width: "220px",
     },
     {
       name: "Status Pembayaran",
       selector: (row) => row?.paymentInfo?.status,
+      sortable: true,
+      width: "220px",
     },
     {
       name: "Status Pesanan",
       selector: (row) => row?.orderStatus,
+      sortable: true,
+      width: "220px",
+    },
+    {
+      name: "User",
+      selector: (row) => row?.user?.email,
+      width: "220px",
+    },
+    {
+      name: "totalAmount",
+      selector: (row) => row?.totalAmount,
+    },
+    {
+      name: "Date",
+      selector: (row) => showFormattedDate(row?.updatedAt),
+      sortable: true,
     },
 
     {
@@ -87,14 +113,46 @@ const ListOfOrders = () => {
     },
   ];
 
+  const headers = [
+    { label: "ID", key: "_id" },
+    { label: "Status Pembayaran", key: "paymentInfo.status" },
+    { label: "Status Pesanan", key: "orderStatus" },
+    { label: "User", key: "user.email" },
+    { label: "Total", key: "totalAmount" },
+    { label: "Tanggal", key: "updatedAt" },
+  ];
+
   return (
     <>
       <MetaData title="Daftar Pesanan" />
       <AdminLayout>
-        <div className="list-order___page flex flex-col overflow-clip lg:overflow-visible">
-          <h2 className="subHeadingTitle capitalize py-3">
-            Daftar Pesanan: {data?.orders?.length}
-          </h2>
+        <div className="list-order___page flex flex-col overflow-scroll lg:overflow-scroll">
+          <div className="flex w-full justify-between items-center lg:pr-2">
+            <h2 className="subHeadingTitle capitalize py-3">
+              Daftar Pesanan: {data?.orders?.length}
+            </h2>
+
+            {/* Export to csv button */}
+            {data?.orders ? (
+              <CSVLink
+                data={data?.orders}
+                headers={headers}
+                filename="Data Pesanan Farhani Florist"
+              >
+                <Button
+                  variant="light"
+                  className="font-poppins"
+                  startContent={
+                    <CloudArrowDownIcon className="h-4 text-blue-500 " />
+                  }
+                >
+                  Download CSV
+                </Button>
+              </CSVLink>
+            ) : (
+              <></>
+            )}
+          </div>
           <DataTable
             className="font-poppins"
             columns={columns}

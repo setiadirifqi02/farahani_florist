@@ -8,6 +8,7 @@ import { saveShippigInfo } from "../../redux/features/cartSlice";
 
 import MetaData from "../layout/MetaData";
 import CheckoutSteps from "./CheckoutSteps";
+import { toast } from "react-hot-toast";
 
 const Shipping = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const Shipping = () => {
   const [city, setCity] = useState("");
   const [province, setProvince] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
-  const [country, setCountry] = useState("Indonesia");
+  const [country, setCountry] = useState("");
 
   const { shippingInfo } = useSelector((state) => state.cart);
 
@@ -49,7 +50,7 @@ const Shipping = () => {
       <div className="shipping___page px-3 md:px-10 flex w-full">
         <div className="shipping__input flex flex-col w-full md:w-7/12 md:px-3 py-10">
           <h2 className="headingTitle">Informasi Pengiriman</h2>
-          <p className="md:max-sm: paragraphDetail">
+          <p className="md:max-sm: paragraphDetail py-4">
             Pastikan alamat yang diisi sudah lengkap dan benar sehingga produk
             kesayanganmu sampai ke tujuan.
           </p>
@@ -65,6 +66,7 @@ const Shipping = () => {
               onChange={(e) => setAddress(e.target.value)}
               placeholder="Masukan lamat"
               className=" lg:max-w-md"
+              isRequired
             />
             <h2 className="subTitle mb-4">Kode Pos</h2>
             <Input
@@ -74,6 +76,7 @@ const Shipping = () => {
               onChange={(e) => setZipCode(e.target.value)}
               placeholder="Masukan kode pos"
               className=" lg:max-w-md"
+              isRequired
             />
             <h2 className="subTitle mb-4">Kabupaten/Kota</h2>
             <Input
@@ -83,6 +86,7 @@ const Shipping = () => {
               onChange={(e) => setCity(e.target.value)}
               placeholder="Masukan kabupaten/kota"
               className=" lg:max-w-md"
+              isRequired
             />
             <h2 className="subTitle mb-4">Provinsi</h2>
             <Input
@@ -92,6 +96,7 @@ const Shipping = () => {
               onChange={(e) => setProvince(e.target.value)}
               placeholder="Masukan provinsi"
               className=" lg:max-w-md"
+              isRequired
             />
             <h2 className="subTitle mb-4">Nomor Telp</h2>
             <Input
@@ -101,6 +106,7 @@ const Shipping = () => {
               onChange={(e) => setPhoneNo(e.target.value)}
               placeholder="Masukan nomor telepon/Hp"
               className=" lg:max-w-md"
+              isRequired
             />
 
             <h2 className="subTitle mb-4">Negara</h2>
@@ -111,6 +117,7 @@ const Shipping = () => {
               onChange={(e) => setCountry(e.target.value)}
               placeholder="Masukan Negara"
               className=" lg:max-w-md"
+              isRequired
             />
             <div className="flex w-full lg:max-w-md flex-col items-center justify-center mt-5 ">
               <Button

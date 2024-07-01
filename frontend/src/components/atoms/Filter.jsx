@@ -9,6 +9,7 @@ import {
   Divider,
   Input,
 } from "@nextui-org/react";
+import { toast } from "react-hot-toast";
 import { FunnelIcon } from "@heroicons/react/24/solid";
 import StarRatings from "react-star-ratings";
 
@@ -34,6 +35,12 @@ const Filter = () => {
 
   const handlePriceFilter = (e) => {
     e.preventDefault();
+    if (min === "") {
+      toast.error("masukkan harga minimal");
+    }
+    if (max === "") {
+      toast.error("masukkan harga maximum");
+    }
 
     searchParams = getPricequeryParams(searchParams, "min", min);
     searchParams = getPricequeryParams(searchParams, "max", max);

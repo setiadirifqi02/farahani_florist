@@ -94,9 +94,12 @@ const ProductReview = () => {
     <>
       <MetaData title="Ulasan Produk" />
       <AdminLayout>
-        <div className="product-review__page flex flex-col  w-96">
+        <div className="product-review__page flex flex-col w-80 px-2 md:w-full">
           <h2 className="subHeadingTitle capitalize py-3">Ulasan Produk</h2>
-          <form onSubmit={onSubmitHandler} className="search flex flex-col">
+          <form
+            onSubmit={onSubmitHandler}
+            className="search flex flex-col w-[340px] lg:w-96"
+          >
             <h2 className="subTitle text-default-600 mb-3">
               Masukan ID Produk :
             </h2>

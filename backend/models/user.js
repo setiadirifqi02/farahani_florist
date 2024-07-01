@@ -3,6 +3,9 @@ import bcyrpt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
+const strongPasswordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -18,8 +21,14 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Silahkan masukan password pengguna!"],
-      minLength: [6, "Password pengguna minimal 6 karakter"],
       select: false,
+      validate: {
+        validator: function (v) {
+          return strongPasswordRegex.test(v);
+        },
+        message: (props) =>
+          `Password minimal 8 karakter mengandung huruf capital, huruf kecil, angka, dan karakter spesial`,
+      },
     },
     avatar: {
       public_id: String,

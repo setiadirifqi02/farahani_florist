@@ -17,7 +17,7 @@ const AdminLayout = ({ children }) => {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div className="admin___layout p-10 md:content flex flex-col   w-full md:min-w-[800px] ">
+    <div className="admin___layout p-4 md:content flex flex-col   w-full md:min-w-[800px] ">
       <h1 className="headingTitle text-default-600 text-center">
         Admin Dashboard Setting
       </h1>
@@ -42,7 +42,7 @@ const AdminLayout = ({ children }) => {
         </div>
       </div>
       <div className="admin-main___layout flex w-full flex-col md:flex-row">
-        <div className="side-bar__container md:w-2/6 mb-5">
+        <div className="side-bar__container md:w-3/12 mb-5">
           <div className="hidden md:block">
             <AdminSideBar />
           </div>
@@ -72,7 +72,7 @@ const AdminLayout = ({ children }) => {
             </Select>
           </div>
         </div>
-        <div className="admin-content__container w-full md:w-4/6  flex">
+        <div className="admin-content__container w-full md:w-9/12 flex">
           {children}
         </div>
       </div>

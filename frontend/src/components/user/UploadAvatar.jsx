@@ -42,10 +42,12 @@ const UploadAvatar = () => {
     const avatarData = {
       avatar,
     };
-
-    console.log(avatarData);
-
-    uploadAvatar(avatarData);
+    if (avatarData.avatar == "") {
+      toast.error("Mohon masukkan file gambar");
+    } else {
+      // console.log(avatarData);
+      uploadAvatar(avatarData);
+    }
   };
 
   const onChangeAvatarHandler = (e) => {
@@ -57,6 +59,7 @@ const UploadAvatar = () => {
         setAvatar(reader.result);
       }
     };
+
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -83,7 +86,7 @@ const UploadAvatar = () => {
               onChange={onChangeAvatarHandler}
               endContent={<PhotoIcon className="h-4 text-green-600" />}
               type="file"
-              accept="images/*"
+              accept="image/png, image/jpeg"
               className="w-[350px] md:w-[400px] my-3"
             />
             <div className="flex w-full lg:max-w-md flex-col items-end mt-5">

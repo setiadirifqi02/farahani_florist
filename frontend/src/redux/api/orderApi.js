@@ -29,6 +29,22 @@ export const orderApi = createApi({
       providesTags: ["Order"],
       invalidatesTags: ["Order"],
     }),
+    ordersConfirmation: builder.query({
+      query: () => `/me/orders_confirmation`,
+      providesTags: ["Order"],
+      invalidatesTags: ["Order"],
+    }),
+    confirmedOrderByUser: builder.mutation({
+      query({ id, body }) {
+        return {
+          url: `/me/orders_confirmation/${id}`,
+          method: "PUT",
+          body,
+        };
+      },
+      providesTags: ["Order"],
+      invalidatesTags: ["Order"],
+    }),
     orderDetails: builder.query({
       query: (id) => `/orders/${id}`,
       providesTags: ["Order"],
@@ -73,4 +89,6 @@ export const {
   useUpdateOrderMutation,
   useDeleteOrderMutation,
   useCreateCheckoutMutation,
+  useOrdersConfirmationQuery,
+  useConfirmedOrderByUserMutation,
 } = orderApi;

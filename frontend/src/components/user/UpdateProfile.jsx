@@ -38,13 +38,17 @@ const UpdateProfile = () => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
-    const profileUpdateData = {
-      name,
-      email,
-    };
-
-    updateProfile(profileUpdateData);
+    if (name.length === 0 && name === "") {
+      toast.error("Mohon masukkan nama pengguna");
+    } else if (email.length === 0 && email === "") {
+      toast.error("Mohon masukkan alamat email");
+    } else {
+      const profileUpdateData = {
+        name,
+        email,
+      };
+      updateProfile(profileUpdateData);
+    }
   };
 
   return (

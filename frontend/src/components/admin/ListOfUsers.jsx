@@ -2,8 +2,12 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 
-import { Spinner, Tooltip } from "@nextui-org/react";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { Button, Spinner, Tooltip } from "@nextui-org/react";
+import {
+  CloudArrowDownIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 
 import toast from "react-hot-toast";
 
@@ -13,6 +17,7 @@ import {
   useDeleteUserByAdminMutation,
   useGetAllUsersByAdminQuery,
 } from "../../redux/api/userApi";
+import { CSVLink } from "react-csv";
 
 const ListOfUsers = () => {
   const { data, isLoading, error } = useGetAllUsersByAdminQuery();
@@ -45,21 +50,26 @@ const ListOfUsers = () => {
     {
       name: "ID",
       selector: (row) => row?._id,
+      width: "220px",
     },
     {
       name: "Nama",
       selector: (row) => row?.name,
+      sortable: true,
     },
     {
       name: "Email",
       selector: (row) => row?.email,
+      sortable: true,
+      width: "220px",
     },
 
     {
-      name: "Email",
+      name: "Role",
       selector: (row) => row?.role,
+      sortable: true,
+      width: "80px",
     },
-
     {
       name: "Action",
       cell: (row) => (
@@ -93,14 +103,44 @@ const ListOfUsers = () => {
     },
   ];
 
+  const headers = [
+    { label: "ID", key: "_id" },
+    { label: "Nama", key: "name" },
+    { label: "Email", key: "email" },
+    { label: "Role", key: "role" },
+  ];
+
   return (
     <>
       <MetaData title="Daftar Pengguna" />
       <AdminLayout>
-        <div className="list-user__page flex flex-col overflow-clip lg:overflow-visible">
-          <h2 className="subHeadingTitle capitalize py-3">
-            Daftar Pengguna: {data?.users?.length}
-          </h2>
+        <div className="list-user__page flex flex-col overflow-scroll lg:overflow-scroll">
+          <div className="flex w-full justify-between items-center lg:pr-2">
+            <h2 className="subHeadingTitle capitalize py-3">
+              Daftar Pengguna: {data?.users?.length}
+            </h2>
+
+            {/* Export to csv button */}
+            {data?.users ? (
+              <CSVLink
+                data={data?.users}
+                headers={headers}
+                filename="Data Pengguna Farhani Florist"
+              >
+                <Button
+                  variant="light"
+                  className="font-poppins"
+                  startContent={
+                    <CloudArrowDownIcon className="h-4 text-blue-500 " />
+                  }
+                >
+                  Download CSV
+                </Button>
+              </CSVLink>
+            ) : (
+              <></>
+            )}
+          </div>
           <DataTable
             className="font-poppins"
             columns={columns}

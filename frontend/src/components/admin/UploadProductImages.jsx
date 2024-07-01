@@ -67,6 +67,7 @@ const UploadProductImages = () => {
       reader.readAsDataURL(file);
     });
   };
+
   const handleDeleteImagePreview = (image) => {
     const filteredImagesPreview = imagesPreview.filter((img) => img != image);
 
@@ -81,8 +82,11 @@ const UploadProductImages = () => {
   };
   const onSubmitHandler = (e) => {
     e.preventDefault();
-
-    uploadProductImages({ id: params?.id, body: { images } });
+    if (images == "") {
+      toast.error("Mohon masukkan file gambar");
+    } else {
+      uploadProductImages({ id: params?.id, body: { images } });
+    }
   };
 
   const deleteImage = (imgId) => {
@@ -111,6 +115,7 @@ const UploadProductImages = () => {
               value={""}
               endContent={<PhotoIcon className="h-4 text-green-600" />}
               type="file"
+              accept="image/png, image/jpeg"
               multiple
               className="w-[350px] md:w-[400px] my-3"
             />

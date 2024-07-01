@@ -30,7 +30,6 @@ export const getProductById = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req?.params?.id).populate(
     "reviews.user"
   );
-
   if (!product) {
     return next(new ErrorHandler("Product not found", 404));
   }
@@ -42,7 +41,7 @@ export const getProductById = catchAsyncErrors(async (req, res, next) => {
 
 // Get product API route => /api/v1/admin/products/
 export const getProductsByAdmin = catchAsyncErrors(async (req, res, next) => {
-  const products = await Product.find();
+  const products = await Product.find().populate("user", "name email");
 
   res.status(200).json({
     products,
@@ -131,8 +130,21 @@ export const deleteProduct = catchAsyncErrors(async (req, res, next) => {
 
 // Create new product API route => /api/v1/admin/products
 export const createProduct = catchAsyncErrors(async (req, res, next) => {
+  const { name, description, price, category, stock, color } = req.body;
+
   req.body.user = req.user._id;
-  const product = await Product.create(req.body);
+
+  const product = await Product.create({
+    name,
+    description,
+    price,
+    category,
+    stock,
+    color,
+    user: req.user._id,
+  });
+
+  console.log(product);
 
   res.status(200).json({
     product,

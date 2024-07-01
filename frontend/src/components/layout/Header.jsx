@@ -26,6 +26,8 @@ import { navMenuItem } from "../../constants/constants";
 import { useGetMeQuery } from "../../redux/api/userApi";
 import { useSelector } from "react-redux";
 import { useLazyLogoutQuery } from "../../redux/api/authApi";
+import { useOrdersConfirmationQuery } from "../../redux/api/orderApi";
+import OrderConfirmation from "../order/OrderConfirmation";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,6 +37,7 @@ const Header = () => {
 
   const { isLoading } = useGetMeQuery();
   const [logout, { data }] = useLazyLogoutQuery();
+  const { data: confirmationOrderd } = useOrdersConfirmationQuery();
 
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
@@ -44,12 +47,11 @@ const Header = () => {
     navigate(0);
   };
 
-  // console.log(data);
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
-      className="p-2 md:p-4 font-poppins"
+      className="md:p-4 font-poppins"
     >
       <NavbarContent>
         <NavbarMenuToggle
@@ -61,7 +63,7 @@ const Header = () => {
             <img
               src="/icons/logo.png"
               alt="Farhani florist's logo"
-              className="h-12 w-8 object-cover md:cursor-pointer ml-28 md:ml-[5px]"
+              className="h-12 w-8 object-cover md:cursor-pointer ml-[120px] md:ml-[5px]"
             />
           </NavbarBrand>
         </NavbarItem>
@@ -86,13 +88,13 @@ const Header = () => {
         ))}
       </NavbarContent>
 
-      <NavbarContent as="div" className="gap-1 ml-24" justify="end">
+      <NavbarContent as="div" className="gap-1 ml-16 md:ml-24" justify="end">
         <NavbarItem className="hidden lg:flex">
           <SearchBar />
         </NavbarItem>
         {user ? (
           <NavbarItem>
-            <div className="relative flex mr-[-20px]">
+            <div className="relative flex mr-[-25px]">
               <span className="absolute right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-green-400 text-white z-50">
                 {cartItems?.length}
               </span>
@@ -152,6 +154,25 @@ const Header = () => {
                 aria-label="orders"
               >
                 Orders
+              </DropdownItem>
+              <DropdownItem
+                key="orders_confirmation"
+                as={routerLink}
+                to="/me/orders_confirmation"
+                aria-label="orders"
+                endContent={
+                  confirmationOrderd?.orders?.length === 0 ? (
+                    <></>
+                  ) : (
+                    <div className="flex items-center justify-center h-6 w-6 bg-green-600  rounded-full">
+                      <p className=" text-white text-xs">
+                        {confirmationOrderd?.orders?.length}
+                      </p>
+                    </div>
+                  )
+                }
+              >
+                Orders Confirmation
               </DropdownItem>
               <DropdownItem
                 key="profileMe"

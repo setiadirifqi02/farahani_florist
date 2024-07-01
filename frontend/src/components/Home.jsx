@@ -51,7 +51,7 @@ const Home = () => {
   return (
     <>
       <MetaData title="Home" />
-      <div className="home___page content">
+      <div className="home___page">
         <div className="search-bar__container  flexCenter lg:hidden ">
           <SearchBar />
         </div>
@@ -64,9 +64,9 @@ const Home = () => {
               : "hero__container flexCenter flex-col md:flex-row"
           }
         >
-          <div className="w-full md:w-6/12 order-last md:order-first md:pr-10 my-10 text-center md:text-left">
+          <div className="w-full md:w-6/12 order-last md:order-first px-4 md:pl-10 md:pr-10 my-10 text-center md:text-left">
             <h1 className="headingTitle">Farhani Florist Shop</h1>
-            <p className="paragraph">
+            <p className="paragraph py-4">
               Temukan tanaman hias cantik untuk menghiasi ruangan Anda. Hadirkan
               keindahan alam dalam potongan kecil di rumah Anda.
             </p>
@@ -81,7 +81,7 @@ const Home = () => {
               Lihat Produk
             </Button>
           </div>
-          <div className="w-full md:w-6/12">
+          <div className="w-full px-6 md:w-6/12">
             <Carousel />
           </div>
         </div>
@@ -123,7 +123,9 @@ const Home = () => {
 
           <p
             className={
-              keyword ? "hidden" : "font-poppins py-4 text-center w-[400px]"
+              keyword
+                ? "hidden"
+                : "font-poppins py-4 px-4 text-center w-[400px]"
             }
           >
             Menampilkan semua koleksi tanaman hias kami dengan berbagai macam
@@ -139,7 +141,7 @@ const Home = () => {
             <h2 className="subHeadingTitle">Filter</h2>
             <Filter />
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 px-2">
             {data?.products?.map((product) => (
               <ProductsItem key={product?._id} products={product} />
             ))}

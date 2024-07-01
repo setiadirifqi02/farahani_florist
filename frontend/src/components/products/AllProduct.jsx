@@ -50,7 +50,7 @@ const AllProduct = () => {
           <SearchBar />
         </div>
         {/* Product List Section */}
-        <div className="product___container flexCenter flex-col mt-5 lg:mt-10">
+        <div className="product___container flexCenter  flex-col mt-5 lg:mt-10">
           <h1 className="headingTitle capitalize text-center w-[400px]">
             {keyword
               ? `Hasil pencarian: ${keyword} 
@@ -64,19 +64,20 @@ const AllProduct = () => {
             }
           >
             Menapilkan seluruh koleksi tanaman {category} yang tersedia di
-            Farhani Floist Shop ditemukan{" "}
+            Farhani Floist Shop <br />
+            ditemukan{" "}
             <span className="font-semibold text-green-500">
               {data?.products?.length}
             </span>
           </p>
           <div
             className="filter flex flex-row justify-between
-           w-full items-center p-3 md:p-5"
+           w-full items-center px-6 md:p-5"
           >
             <h2 className="subHeadingTitle">Semua Produk </h2>
             <Filter />
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 px-2 lg:grid-cols-4">
             {data?.products?.map((product) => (
               <ProductsItem key={product?._id} products={product} />
             ))}

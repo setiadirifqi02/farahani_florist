@@ -1,4 +1,5 @@
 import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
+import order from "../models/order.js";
 import Order from "../models/order.js";
 import Product from "../models/product.js";
 import ErrorHandler from "../utlis/errorHandler.js";
@@ -56,19 +57,48 @@ export const getOrderDetails = catchAsyncErrors(async (req, res, next) => {
 
 // Get order details by current user => /api/v1/me/orders
 export const getCurrentUserOrder = catchAsyncErrors(async (req, res, next) => {
-  const orders = await Order.find({ user: req.user._id }).populate(
-    "user",
-    "name email"
-  );
+  const orders = await Order.find({ user: req.user._id })
+    .populate("user", "name email")
+    .where({ isConfirmedByUser: "Dikonfirmasi" });
 
   res.status(200).json({
     orders,
   });
 });
 
+// Get order details by current user => /api/v1/me/orders_confirmation
+export const getUnconfirmUserOrder = catchAsyncErrors(
+  async (req, res, next) => {
+    const orders = await Order.find({ user: req.user._id })
+      .populate("user", "name email")
+      .where({ isConfirmedByUser: "Belum Konfirmasi" });
+
+    res.status(200).json({
+      orders,
+    });
+  }
+);
+
+// Get order details by current user => /api/v1/me/orders_confirmation/:id
+export const confirmedOrderByUser = catchAsyncErrors(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new ErrorHandler("No order found with the ID"), 404);
+  }
+
+  order.isConfirmedByUser = req.body.isConfirmedByUser;
+
+  await order.save();
+
+  res.status(200).json({
+    message: "Order has been confirmed by user",
+  });
+});
+
 // Get all orders (Admin Route) => /api/v1/admin/orders
 export const getAllOrdersByAdmin = catchAsyncErrors(async (req, res, next) => {
-  const orders = await Order.find();
+  const orders = await Order.find().populate("user", "email");
 
   res.status(200).json({
     orders,
@@ -138,6 +168,7 @@ export const deleteOrderByAdmin = catchAsyncErrors(async (req, res, next) => {
 });
 
 async function getSalesData(startDate, endDate) {
+  // get total sales and order data by date
   const salesData = await Order.aggregate([
     {
       // 1st Stage: Filter the data
@@ -165,10 +196,223 @@ async function getSalesData(startDate, endDate) {
     },
   ]);
 
-  // console.log(salesData);
+  // get order data by date
+  const itemOfSales = await Order.aggregate([
+    {
+      // 1st Stage: Filter the data
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+  ]);
+
+  // get completed order data by date
+  const completedOrder = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+        orderStatus: "Delivered",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          date: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+        },
+        totalCompletedSales: { $sum: "$totalAmount" },
+        numOfCompletedSales: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // sum total amount of completed order
+  let totalCompletedSales = 0;
+  let numOfCompletedSales = 0;
+
+  completedOrder.forEach((entry) => {
+    const totalCompleted = entry?.totalCompletedSales;
+    const numOfCompleted = entry?.numOfCompletedSales;
+
+    totalCompletedSales += totalCompleted;
+    numOfCompletedSales += numOfCompleted;
+  });
+
+  // get processing order data by date
+  const processingOrder = await Order.aggregate([
+    {
+      // 1st Stage: Filter the data
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+        orderStatus: "Processing",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          date: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+        },
+        totalProcessingSales: { $sum: "$totalAmount" },
+        numOfProcessingSales: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // sum total amount of processing order
+  let totalProcessingSales = 0;
+  let numOfProcessingSales = 0;
+
+  processingOrder.forEach((entry) => {
+    const totalProcessing = entry?.totalProcessingSales;
+    const numOfProcessing = entry?.numOfProcessingSales;
+
+    totalProcessingSales += totalProcessing;
+    numOfProcessingSales += numOfProcessing;
+  });
+
+  // get cancel order data by date
+  const cancelOrder = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+        orderStatus: "Cancel",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          date: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+        },
+        totalCancelSales: { $sum: "$totalAmount" },
+        numOfCancelSales: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // sum total amount of processing order
+  let totalCancelSales = 0;
+  let numOfCancelSales = 0;
+
+  cancelOrder.forEach((entry) => {
+    const totalCancel = entry?.totalCancelSales;
+    const numOfCancel = entry?.numOfCancelSales;
+
+    totalCancelSales += totalCancel;
+    numOfCancelSales += numOfCancel;
+  });
+
+  // get COD  order data by date
+  const codOrder = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+        paymentMethod: "COD",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          date: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+        },
+        totalCodSales: { $sum: "$totalAmount" },
+        numOfCodSales: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // sum total number of COD order
+  let totalCodSales = 0;
+  let numOfCodSales = 0;
+
+  codOrder.forEach((entry) => {
+    const totalCod = entry?.totalCodSales;
+    const numOfCod = entry?.numOfCodSales;
+
+    totalCodSales += totalCod;
+    numOfCodSales += numOfCod;
+  });
+
+  const onlinePaymentOrder = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+        paymentMethod: "Online Payment",
+      },
+    },
+    {
+      $group: {
+        _id: {
+          date: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$createdAt",
+            },
+          },
+        },
+        totalOnlinePaymentSales: { $sum: "$totalAmount" },
+        numOfOnlinePaymentSales: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // sum total number of Online Payment order
+  let totalOnlinePaymentSales = 0;
+  let numOfOnlinePaymentSales = 0;
+
+  onlinePaymentOrder.forEach((entry) => {
+    const totalOnlinePayment = entry?.totalOnlinePaymentSales;
+    const numOfOnlinePayment = entry?.numOfOnlinePaymentSales;
+
+    totalOnlinePaymentSales += totalOnlinePayment;
+    numOfOnlinePaymentSales += numOfOnlinePayment;
+  });
 
   // Create map to store sales of data and num of order
-
   const salesMap = new Map();
   let totalSales = 0;
   let totalNumOfOrders = 0;
@@ -186,8 +430,6 @@ async function getSalesData(startDate, endDate) {
   // Generate an array of dates between start and end date
   const datesBetween = getDatesBetween(startDate, endDate);
 
-  // console.log(datesBetween);
-
   // Create final sales data array with 0 for dates without sales
   const finalSalesData = datesBetween.map((date) => ({
     date,
@@ -195,8 +437,52 @@ async function getSalesData(startDate, endDate) {
     numOfOrders: (salesMap.get(date) || { numOfOrders: 0 }).numOfOrders,
   }));
 
-  // console.log(finalSalesData, totalSales, totalNumOfOrders);
-  return { salesData: finalSalesData, totalSales, totalNumOfOrders };
+  /*
+  console.log(
+    "Completed order :",
+    totalCompletedSales,
+    "Count :",
+    numOfCompletedSales
+  );
+  console.log(
+    "Processing order: ",
+    totalProcessingSales,
+    "Count :",
+    numOfProcessingSales
+  );
+  console.log(
+    "Cancel Sales order: ",
+    totalCancelSales,
+    "Count : ",
+    numOfCancelSales
+  );
+
+  console.log("COD Sales :", totalCodSales, "Count :", numOfCodSales);
+  console.log(
+    "Online Payment Sales :",
+    totalOnlinePaymentSales,
+    "Count :",
+    numOfOnlinePaymentSales
+  );
+
+  */
+
+  return {
+    salesData: finalSalesData,
+    totalSales,
+    totalNumOfOrders,
+    itemOfSales,
+    totalCompletedSales,
+    numOfCompletedSales,
+    totalProcessingSales,
+    numOfProcessingSales,
+    totalCancelSales,
+    numOfCancelSales,
+    totalCodSales,
+    numOfCodSales,
+    totalOnlinePaymentSales,
+    numOfOnlinePaymentSales,
+  };
 }
 
 function getDatesBetween(startDate, endDate) {
@@ -220,14 +506,37 @@ export const getSalesByAdmin = catchAsyncErrors(async (req, res, next) => {
   startDate.setUTCHours(0, 0, 0, 0);
   endDate.setUTCHours(23, 59, 59, 999);
 
-  const { salesData, totalSales, totalNumOfOrders } = await getSalesData(
-    startDate,
-    endDate
-  );
+  const {
+    salesData,
+    totalSales,
+    totalNumOfOrders,
+    itemOfSales,
+    totalCompletedSales,
+    numOfCompletedSales,
+    totalProcessingSales,
+    numOfProcessingSales,
+    totalCancelSales,
+    numOfCancelSales,
+    totalCodSales,
+    numOfCodSales,
+    totalOnlinePaymentSales,
+    numOfOnlinePaymentSales,
+  } = await getSalesData(startDate, endDate);
 
   res.status(200).json({
     totalSales,
     totalNumOfOrders,
     sales: salesData,
+    itemOfSales,
+    totalCompletedSales,
+    numOfCompletedSales,
+    totalProcessingSales,
+    numOfProcessingSales,
+    totalCancelSales,
+    numOfCancelSales,
+    totalCodSales,
+    numOfCodSales,
+    totalOnlinePaymentSales,
+    numOfOnlinePaymentSales,
   });
 });

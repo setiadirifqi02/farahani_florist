@@ -41,7 +41,18 @@ const UpdatePassword = () => {
       password,
     };
 
-    updatePassword(passwordUpdateData);
+    const securePassword =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (oldPassword.length === 0) {
+      toast.error("Masukkan password lama");
+    } else if (!securePassword.test(password)) {
+      toast.error(
+        "Password minimal 8 karakter mengandung huruf kapital, huruf kecil, angka, dan karakter spesial"
+      );
+    } else {
+      updatePassword(passwordUpdateData);
+    }
   };
 
   return (

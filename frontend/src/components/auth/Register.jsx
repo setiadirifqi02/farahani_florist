@@ -68,7 +68,7 @@ const Register = () => {
       <div className="register___page content flex flex-col md:flex-row h-screen">
         <div className="w-full md:w-6/12 md:pr-10 my-10 text-center md:text-left">
           <h1 className="headingTitle">
-            Masuk Akun
+            Daftar Akun
             <br />
             Farhani Florist Shop
           </h1>

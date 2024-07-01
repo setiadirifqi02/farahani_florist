@@ -7,9 +7,9 @@ export default defineConfig({
     proxy: {
       "/api": "http://localhost:4000",
     },
-    hmr: {
-      clientPort: 443,
-    },
+    // hmr: {
+    //   clientPort: 443,
+    // },
   },
   plugins: [react()],
 });

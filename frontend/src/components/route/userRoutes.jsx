@@ -22,6 +22,7 @@ import Profile from "../user/Profile";
 import UpdatePassword from "../user/UpdatePassword";
 import UpdateProfile from "../user/UpdateProfile";
 import UploadAvatar from "../user/UploadAvatar";
+import OrderConfirmation from "../order/OrderConfirmation";
 
 const userRoutes = () => {
   return (
@@ -66,6 +67,15 @@ const userRoutes = () => {
         element={
           <ProtectedRoute>
             <MyOrders />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/me/orders_confirmation"
+        element={
+          <ProtectedRoute>
+            <OrderConfirmation />
           </ProtectedRoute>
         }
       />
