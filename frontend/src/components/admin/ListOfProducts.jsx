@@ -1,19 +1,14 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
-import { CSVDownload, CSVLink } from "react-csv";
 
-import { Button, Spinner, Tooltip } from "@nextui-org/react";
-import {
-  CloudArrowDownIcon,
-  PencilIcon,
-  PhotoIcon,
-  TrashIcon,
-} from "@heroicons/react/24/solid";
+import { Spinner, Tooltip } from "@nextui-org/react";
+import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 
 import AdminLayout from "../layout/AdminLayout";
 import MetaData from "../layout/MetaData";
+import ExportCSVButton from "../atoms/ExportCSVButton";
 
 import {
   useDeleteProductMutation,
@@ -51,6 +46,7 @@ const ListOfProducts = () => {
     deleteProduct(id);
   };
 
+  // colomn of react data table component
   const columns = [
     {
       name: "ID",
@@ -129,12 +125,15 @@ const ListOfProducts = () => {
     },
   ];
 
+  // colomn header for export to csv file
   const headers = [
     { label: "ID", key: "_id" },
     { label: "Name", key: "name" },
     { label: "Harga", key: "price" },
     { label: "Stok", key: "stock" },
     { label: "Warna", key: "color" },
+    { label: "Rating", key: "ratings" },
+    { label: "Jumlah Review", key: "numOfReviews" },
     { label: "Input by", key: "user.email" },
   ];
 
@@ -150,21 +149,11 @@ const ListOfProducts = () => {
 
             {/* Export to csv button */}
             {data?.products ? (
-              <CSVLink
+              <ExportCSVButton
                 data={data?.products}
                 headers={headers}
-                filename="Data Produk Farhani Florist"
-              >
-                <Button
-                  variant="light"
-                  className="font-poppins"
-                  startContent={
-                    <CloudArrowDownIcon className="h-4 text-blue-500 " />
-                  }
-                >
-                  Download CSV
-                </Button>
-              </CSVLink>
+                filename={"Data Produk Farhani Florist"}
+              />
             ) : (
               <></>
             )}

@@ -2,22 +2,19 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 
-import { Button, Spinner, Tooltip } from "@nextui-org/react";
-import {
-  CloudArrowDownIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/react/24/solid";
+import { Spinner, Tooltip } from "@nextui-org/react";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 import toast from "react-hot-toast";
 
 import AdminLayout from "../layout/AdminLayout";
 import MetaData from "../layout/MetaData";
+import ExportCSVButton from "../atoms/ExportCSVButton";
+
 import {
   useDeleteUserByAdminMutation,
   useGetAllUsersByAdminQuery,
 } from "../../redux/api/userApi";
-import { CSVLink } from "react-csv";
 
 const ListOfUsers = () => {
   const { data, isLoading, error } = useGetAllUsersByAdminQuery();
@@ -46,6 +43,7 @@ const ListOfUsers = () => {
     deleteUser(id);
   };
 
+  // colomn of react data table component
   const columns = [
     {
       name: "ID",
@@ -103,6 +101,7 @@ const ListOfUsers = () => {
     },
   ];
 
+  // colomn header for export to csv file
   const headers = [
     { label: "ID", key: "_id" },
     { label: "Nama", key: "name" },
@@ -122,21 +121,11 @@ const ListOfUsers = () => {
 
             {/* Export to csv button */}
             {data?.users ? (
-              <CSVLink
+              <ExportCSVButton
                 data={data?.users}
                 headers={headers}
-                filename="Data Pengguna Farhani Florist"
-              >
-                <Button
-                  variant="light"
-                  className="font-poppins"
-                  startContent={
-                    <CloudArrowDownIcon className="h-4 text-blue-500 " />
-                  }
-                >
-                  Download CSV
-                </Button>
-              </CSVLink>
+                filename={"Data Pengguna Farhani Florist"}
+              />
             ) : (
               <></>
             )}

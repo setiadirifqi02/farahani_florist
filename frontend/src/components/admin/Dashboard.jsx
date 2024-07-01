@@ -17,13 +17,10 @@ import SalesSummaryTable from "./SalesSummaryTable";
 
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-
-import {
-  CloudArrowDownIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/react/24/solid";
 import { CSVLink } from "react-csv";
+
+import { CloudArrowDownIcon } from "@heroicons/react/24/solid";
+import ExportCSVButton from "../atoms/ExportCSVButton";
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date().setDate(1));
@@ -73,7 +70,7 @@ const Dashboard = () => {
     });
   };
 
-  // colom of react data table component
+  // colomn of react data table component
   const columns = [
     {
       name: "ID",
@@ -112,7 +109,7 @@ const Dashboard = () => {
     },
   ];
 
-  // colom for export to csv file
+  // colomn headers for export to csv file
   const headers = [
     { label: "ID", key: "_id" },
     { label: "Status Pembayaran", key: "paymentInfo.status" },
@@ -167,10 +164,10 @@ const Dashboard = () => {
           <div id="sales_report" className="p-5 ml-[-20px]">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="subHeadingTitle w-full capitalize py-3">
+                <h2 className="subHeadingTitle  capitalize py-3">
                   Laporan Penjualan
                 </h2>
-                <h2 className="subHeadingTitle w-full capitalize mt-[-20px] mb-10">
+                <h2 className="font-poppins text-sm text-default-500 capitalize mt-[-10px] mb-10">
                   {showFormattedDate(startDate)} - {showFormattedDate(endDate)}
                 </h2>
               </div>
@@ -230,21 +227,11 @@ const Dashboard = () => {
               </h2>
 
               {data?.itemOfSales ? (
-                <CSVLink
+                <ExportCSVButton
                   data={data?.itemOfSales}
                   headers={headers}
-                  filename="Data item penjualan Farhani Florist"
-                >
-                  <Button
-                    variant="light"
-                    className="font-poppins"
-                    startContent={
-                      <CloudArrowDownIcon className="h-4 text-blue-500 " />
-                    }
-                  >
-                    Download CSV
-                  </Button>
-                </CSVLink>
+                  filename={"Laporan Item Penjualan"}
+                />
               ) : (
                 <></>
               )}

@@ -20,6 +20,7 @@ import {
 
 import { showFormattedDate } from "../../helpers/helpers";
 import { CSVLink } from "react-csv";
+import ExportCSVButton from "../atoms/ExportCSVButton";
 
 const ListOfOrders = () => {
   const { data, isLoading, error } = useGetOrdersByAdminQuery();
@@ -47,6 +48,7 @@ const ListOfOrders = () => {
     deleteOrder(id);
   };
 
+  // colomn of react data table component
   const columns = [
     {
       name: "ID",
@@ -113,6 +115,7 @@ const ListOfOrders = () => {
     },
   ];
 
+  // colomn header for export to csv file
   const headers = [
     { label: "ID", key: "_id" },
     { label: "Status Pembayaran", key: "paymentInfo.status" },
@@ -134,25 +137,16 @@ const ListOfOrders = () => {
 
             {/* Export to csv button */}
             {data?.orders ? (
-              <CSVLink
+              <ExportCSVButton
                 data={data?.orders}
                 headers={headers}
-                filename="Data Pesanan Farhani Florist"
-              >
-                <Button
-                  variant="light"
-                  className="font-poppins"
-                  startContent={
-                    <CloudArrowDownIcon className="h-4 text-blue-500 " />
-                  }
-                >
-                  Download CSV
-                </Button>
-              </CSVLink>
+                filename={"Data Pesanan Farhani Florist"}
+              />
             ) : (
               <></>
             )}
           </div>
+
           <DataTable
             className="font-poppins"
             columns={columns}

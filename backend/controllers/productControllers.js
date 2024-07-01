@@ -204,6 +204,7 @@ export const getProductReview = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     reviews: product.reviews,
+    product,
   });
 });
 

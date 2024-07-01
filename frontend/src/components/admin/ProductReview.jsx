@@ -4,13 +4,16 @@ import DataTable from "react-data-table-component";
 import { MagnifyingGlassIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { Button, Input, Spinner, Tooltip } from "@nextui-org/react";
 
+import toast from "react-hot-toast";
+
 import AdminLayout from "../layout/AdminLayout";
 import MetaData from "../layout/MetaData";
+import ExportCSVButton from "../atoms/ExportCSVButton";
+
 import {
   useDeleteProductReviewMutation,
   useLazyGetReviewByAdminQuery,
 } from "../../redux/api/productsApi";
-import toast from "react-hot-toast";
 
 const ProductReview = () => {
   const [productId, setProductId] = useState();
@@ -48,6 +51,7 @@ const ProductReview = () => {
     deleteReview({ productId, id });
   };
 
+  // colomn of react data table component
   const columns = [
     {
       name: "ID",
@@ -65,6 +69,10 @@ const ProductReview = () => {
     {
       name: "User",
       selector: (row) => row?.user?.name,
+    },
+    {
+      name: "Email",
+      selector: (row) => row?.user?.email,
     },
 
     {
@@ -88,6 +96,15 @@ const ProductReview = () => {
         </div>
       ),
     },
+  ];
+
+  // colomn header for export to csv file
+  const headers = [
+    { label: "ID", key: "_id" },
+    { label: "Rating", key: "rating" },
+    { label: "Ulasan", key: "comment" },
+    { label: "User", key: "user.name" },
+    { label: "Email", key: "user.email" },
   ];
 
   return (
@@ -128,9 +145,23 @@ const ProductReview = () => {
 
           {data?.reviews?.length > 0 ? (
             <div className="result flex-flex-col">
-              <h2 className="subTitle text-default-600 mb-3">
-                Hasil Pencarian:
-              </h2>
+              <div className="flex w-full justify-between items-center lg:pr-2">
+                <h2 className="subTitle text-default-600 mb-3 capitalize">
+                  {`Menampilkan Review Tanaman ${data?.product?.name}  :`}
+                </h2>
+
+                {/* Export to CSV Button */}
+                {data?.reviews ? (
+                  <ExportCSVButton
+                    data={data?.reviews}
+                    headers={headers}
+                    filename={`Review Tanaman ${data?.product?.name}`}
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+
               <DataTable
                 className="font-poppins"
                 columns={columns}
