@@ -28,17 +28,17 @@ connectDatabase();
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
-// app.use(helmet.hidePoweredBy());
+app.use(helmet.hidePoweredBy());
 
-// app.use(helmet.frameguard({ action: "deny" }));
+app.use(helmet.frameguard({ action: "deny" }));
 
-// app.use(helmet.xssFilter());
+app.use(helmet.xssFilter());
 
-// app.use(helmet.ieNoOpen());
+app.use(helmet.ieNoOpen());
 
-// app.use(helmet.hsts());
+app.use(helmet.hsts());
 
-// app.use(helmet.noSniff());
+app.use(helmet.noSniff());
 
 // Products routes
 app.use("/api/v1", productRoutes);

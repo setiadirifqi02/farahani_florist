@@ -54,7 +54,7 @@ const CheckoutSteps = ({ shipping, confirmOrder, payment }) => {
             </div>
             <div className="mt-3">
               <span className="block text-sm font-medium text-gray-800 dark:text-white">
-                Konfirmasi Order
+                Konfirmasi Pembelian
               </span>
             </div>
           </li>
@@ -68,7 +68,7 @@ const CheckoutSteps = ({ shipping, confirmOrder, payment }) => {
             </div>
             <div className="mt-3">
               <span className="block text-sm font-medium text-gray-800 dark:text-white">
-                Konfirmasi Order
+                Konfirmasi Pembelian
               </span>
             </div>
           </li>

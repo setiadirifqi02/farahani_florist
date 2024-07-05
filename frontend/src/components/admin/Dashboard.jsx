@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button, Card, CardBody, Spinner } from "@nextui-org/react";
+import { Button, Card, CardBody, Spinner, Tooltip } from "@nextui-org/react";
 import DatePicker from "react-datepicker";
 import toast from "react-hot-toast";
 import "react-datepicker/dist/react-datepicker.css";
@@ -17,10 +17,10 @@ import SalesSummaryTable from "./SalesSummaryTable";
 
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import { CSVLink } from "react-csv";
 
-import { CloudArrowDownIcon } from "@heroicons/react/24/solid";
+import { CloudArrowDownIcon, EyeIcon } from "@heroicons/react/24/solid";
 import ExportCSVButton from "../atoms/ExportCSVButton";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date().setDate(1));
@@ -107,17 +107,53 @@ const Dashboard = () => {
       selector: (row) => showFormattedDate(row?.updatedAt),
       sortable: true,
     },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex gap-1">
+          <Tooltip
+            className="text-white"
+            showArrow={true}
+            color="primary"
+            content="Detail Order"
+          >
+            <Link to={`/admin/orders/${row?._id}`} className="btn btn-primary">
+              <EyeIcon className="h-4 text-green-500 " />
+            </Link>
+          </Tooltip>
+        </div>
+      ),
+    },
   ];
+
+  // processing nested JSOn data that has nested JSON array of itemOfSales
+  const itemOfSalesData = data?.itemOfSales.map((item) => ({
+    _id: item._id,
+    payment_status: item.paymentInfo.status,
+    orderStatus: item.orderStatus,
+    user: item.user[0].email,
+    totalAmount: `Rp.${item.totalAmount}`,
+    paymentMethod: item.paymentMethod,
+    city: item.shippingInfo.city,
+    address: item.shippingInfo.address,
+    date: item.updatedAt,
+    orderItems: item.orderItems.map(
+      (order) => `${order.name}, Rp.${order.price}, ${order.quantity} buah`
+    ),
+  }));
 
   // colomn headers for export to csv file
   const headers = [
     { label: "ID", key: "_id" },
-    { label: "Status Pembayaran", key: "paymentInfo.status" },
+    { label: "Status Pembayaran", key: "payment_status" },
     { label: "Status Pesanan", key: "orderStatus" },
-    { label: "User", key: "user[0].email" },
+    { label: "User", key: "user" },
+    { label: "Unit Pembelian", key: "orderItems" },
     { label: "Total", key: "totalAmount" },
     { label: "Metode Pembayaran", key: "paymentMethod" },
-    { label: "Tanggal", key: "updatedAt" },
+    { label: "Kota", key: "city" },
+    { label: "Alamat", key: "address" },
+    { label: "Tanggal", key: "date" },
   ];
 
   return (
@@ -228,7 +264,7 @@ const Dashboard = () => {
 
               {data?.itemOfSales ? (
                 <ExportCSVButton
-                  data={data?.itemOfSales}
+                  data={itemOfSalesData}
                   headers={headers}
                   filename={"Laporan Item Penjualan"}
                 />

@@ -19,7 +19,7 @@ const ConfirmOrder = () => {
 
   return (
     <>
-      <MetaData title="Konfirmasi Pesanan" />
+      <MetaData title="Konfirmasi Pembelian" />
       <CheckoutSteps shipping confirmOrder />
       <div className="confirm-order__page flex content flex-col w-full lg:flex-row">
         {/* Order Shipping Info */}
