@@ -14,6 +14,7 @@ import {
   useDeleteProductReviewMutation,
   useLazyGetReviewByAdminQuery,
 } from "../../redux/api/productsApi";
+import ExportPDFButton from "../atoms/ExportPDFButton";
 
 const ProductReview = () => {
   const [productId, setProductId] = useState();
@@ -150,16 +151,22 @@ const ProductReview = () => {
                   {`Menampilkan Review Tanaman ${data?.product?.name}  :`}
                 </h2>
 
-                {/* Export to CSV Button */}
-                {data?.reviews ? (
-                  <ExportCSVButton
-                    data={data?.reviews}
-                    headers={headers}
-                    filename={`Review Tanaman ${data?.product?.name}`}
+                <div className="export-btn flex gap-4 items-center">
+                  <ExportPDFButton
+                    link={`/admin/reviews/report?id=${productId}`}
                   />
-                ) : (
-                  <></>
-                )}
+
+                  {/* Export to CSV Button */}
+                  {data?.reviews ? (
+                    <ExportCSVButton
+                      data={data?.reviews}
+                      headers={headers}
+                      filename={`Review Tanaman ${data?.product?.name}`}
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
 
               <DataTable

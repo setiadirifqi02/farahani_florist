@@ -85,6 +85,7 @@ export const {
   useMyOrdersQuery,
   useOrderDetailsQuery,
   useLazyGetDashboardSalesQuery,
+  useGetDashboardSalesQuery,
   useGetOrdersByAdminQuery,
   useUpdateOrderMutation,
   useDeleteOrderMutation,

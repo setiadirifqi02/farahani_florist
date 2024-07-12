@@ -13,14 +13,13 @@ import { useLazyGetDashboardSalesQuery } from "../../redux/api/orderApi";
 import SalesChart from "../charts/SalesChart";
 import DataTable from "react-data-table-component";
 import { showFormattedDate } from "../../helpers/helpers";
-import SalesSummaryTable from "./SalesSummaryTable";
+import SalesSummaryTable from "./components/SalesSummaryTable";
 
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
-
-import { CloudArrowDownIcon, EyeIcon } from "@heroicons/react/24/solid";
+import { EyeIcon } from "@heroicons/react/24/solid";
 import ExportCSVButton from "../atoms/ExportCSVButton";
 import { Link } from "react-router-dom";
+import ExportPDFButton from "../atoms/ExportPDFButton";
+import TopProductsTable from "./components/TopProductsTable";
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date().setDate(1));
@@ -50,25 +49,7 @@ const Dashboard = () => {
     });
   };
 
-  // console.log(data);
-
-  // Export to Pdf
-  const onHandleDownload = () => {
-    const input = document.getElementById("sales_report");
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF();
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, 0);
-      pdf.save(
-        `laporan penjualan ${showFormattedDate(
-          startDate
-        )} - ${showFormattedDate(endDate)}.pdf`
-      );
-    });
-  };
+  // console.log(data?.topProducts);
 
   // colomn of react data table component
   const columns = [
@@ -76,36 +57,43 @@ const Dashboard = () => {
       name: "ID",
       selector: (row) => row?._id,
       width: "220px",
+      wrap: true,
     },
     {
       name: "Status Pembayaran",
       selector: (row) => row?.paymentInfo?.status,
       sortable: true,
-      width: "220px",
+      width: "170px",
     },
     {
       name: "Status Pesanan",
       selector: (row) => row?.orderStatus,
       sortable: true,
-      width: "220px",
+      width: "170px",
+      wrap: true,
     },
     {
       name: "User",
       selector: (row) => row?.user[0].email,
-      width: "220px",
+      width: "170px",
+      wrap: true,
     },
     {
       name: "Metode Transakai",
       selector: (row) => row?.paymentMethod,
+      wrap: true,
     },
     {
       name: "totalAmount",
-      selector: (row) => row?.totalAmount,
+      selector: (row) => rupiahConverter(row?.totalAmount),
+      width: "170px",
+      wrap: true,
     },
     {
       name: "Date",
       selector: (row) => showFormattedDate(row?.updatedAt),
       sortable: true,
+      wrap: true,
     },
     {
       name: "Action",
@@ -155,6 +143,9 @@ const Dashboard = () => {
     { label: "Alamat", key: "address" },
     { label: "Tanggal", key: "date" },
   ];
+
+  const linkStartDate = new Date(startDate).toISOString();
+  const linkEndDate = endDate.toISOString();
 
   return (
     <>
@@ -216,7 +207,7 @@ const Dashboard = () => {
                 className="bg-green-300/80 w-[360px] md:w-full text-black font-poppins"
               >
                 <CardBody>
-                  <p className="text-center">Sales </p>
+                  <p className="text-center">Penjualan </p>
                   <h2 className="text-center">
                     {data?.totalSales
                       ? rupiahConverter(data?.totalSales)
@@ -240,20 +231,16 @@ const Dashboard = () => {
             {/* Chart */}
             <SalesChart salesData={data?.sales} />
 
+            {/* Top Products */}
+            <div className="flex flex-col">
+              <TopProductsTable data={data?.topProducts} />
+            </div>
+
             {/* More sales info table */}
             <div className="flex flex-col">
               <SalesSummaryTable data={data} />
             </div>
           </div>
-
-          <Button
-            color="primary"
-            className="w-full md:w-52 text-white font-poppins"
-            startContent={<CloudArrowDownIcon className="h-4 text-white" />}
-            onClick={onHandleDownload}
-          >
-            Download Laporan
-          </Button>
 
           {/* Order's data */}
           <div className="sales__table flex flex-col overflow-scroll my-4 md:my-8">
@@ -262,15 +249,20 @@ const Dashboard = () => {
                 Daftar Data Penjualan:
               </h2>
 
-              {data?.itemOfSales ? (
-                <ExportCSVButton
-                  data={itemOfSalesData}
-                  headers={headers}
-                  filename={"Laporan Item Penjualan"}
+              <div className="export-btn flex gap-4 items-center">
+                <ExportPDFButton
+                  link={`/admin/dashboard/report?startDate=${linkStartDate}&endDate=${linkEndDate}`}
                 />
-              ) : (
-                <></>
-              )}
+                {data?.itemOfSales ? (
+                  <ExportCSVButton
+                    data={itemOfSalesData}
+                    headers={headers}
+                    filename={"Laporan Item Penjualan"}
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
 
             <DataTable

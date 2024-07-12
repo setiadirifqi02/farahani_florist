@@ -15,6 +15,7 @@ import {
   useGetAdminProductsQuery,
 } from "../../redux/api/productsApi";
 import { showFormattedDate } from "../../helpers/helpers";
+import ExportPDFButton from "../atoms/ExportPDFButton";
 
 const ListOfProducts = () => {
   const { data, isLoading, error } = useGetAdminProductsQuery();
@@ -142,21 +143,24 @@ const ListOfProducts = () => {
       <MetaData title="Daftar produk" />
       <AdminLayout>
         <div className="list-product___page flex flex-col overflow-scroll lg:overflow-scroll">
-          <div className="flex w-full justify-between items-center lg:pr-2">
+          <div className="flex flex-col md:flex-row w-full justify-between md:items-center lg:pr-2">
             <h2 className="subHeadingTitle capitalize py-3">
               Daftar Produk: {data?.products?.length}
             </h2>
 
-            {/* Export to csv button */}
-            {data?.products ? (
-              <ExportCSVButton
-                data={data?.products}
-                headers={headers}
-                filename={"Data Produk Farhani Florist"}
-              />
-            ) : (
-              <></>
-            )}
+            <div className="export-btn flex gap-4 items-center">
+              <ExportPDFButton link={"/admin/products/report"} />
+              {/* Export to csv button */}
+              {data?.products ? (
+                <ExportCSVButton
+                  data={data?.products}
+                  headers={headers}
+                  filename={"Data Produk Farhani Florist"}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
 
           <DataTable

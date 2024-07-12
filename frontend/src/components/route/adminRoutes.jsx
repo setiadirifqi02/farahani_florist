@@ -10,6 +10,11 @@ import UpdateProduct from "../admin/UpdateProduct";
 import UpdateUser from "../admin/UpdateUser";
 import UploadProductImages from "../admin/UploadProductImages";
 import ProtectedRoute from "../auth/ProtectedRoute";
+import ProductReport from "../Report/ProductReport";
+import UserReport from "../Report/UserReport";
+import ProductReviewReport from "../Report/ProductReviewReport";
+import OrderReport from "../Report/OrderReport";
+import SalesReport from "../Report/SalesReport";
 
 const adminRoutes = () => {
   return (
@@ -19,6 +24,14 @@ const adminRoutes = () => {
         element={
           <ProtectedRoute admin={true}>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/dashboard/report"
+        element={
+          <ProtectedRoute admin={true}>
+            <SalesReport />
           </ProtectedRoute>
         }
       />
@@ -54,6 +67,14 @@ const adminRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/products/report"
+        element={
+          <ProtectedRoute admin={true}>
+            <ProductReport />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/admin/orders"
@@ -68,6 +89,14 @@ const adminRoutes = () => {
         element={
           <ProtectedRoute admin={true}>
             <ProcessOrder />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/orders/report"
+        element={
+          <ProtectedRoute admin={true}>
+            <OrderReport />
           </ProtectedRoute>
         }
       />
@@ -87,11 +116,28 @@ const adminRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/admin/users/report"
+        element={
+          <ProtectedRoute admin={true}>
+            <UserReport />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/admin/reviews"
         element={
           <ProtectedRoute admin={true}>
             <ProductReview />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/reviews/report"
+        element={
+          <ProtectedRoute admin={true}>
+            <ProductReviewReport />
           </ProtectedRoute>
         }
       />

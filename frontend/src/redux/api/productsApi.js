@@ -118,5 +118,6 @@ export const {
   useDeleteProductImagesMutation,
   useDeleteProductMutation,
   useLazyGetReviewByAdminQuery,
+  useGetReviewByAdminQuery,
   useDeleteProductReviewMutation,
 } = productApi;

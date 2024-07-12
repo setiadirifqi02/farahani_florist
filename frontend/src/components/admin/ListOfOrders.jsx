@@ -16,6 +16,7 @@ import {
 
 import { showFormattedDate } from "../../helpers/helpers";
 import ExportCSVButton from "../atoms/ExportCSVButton";
+import ExportPDFButton from "../atoms/ExportPDFButton";
 
 const ListOfOrders = () => {
   const { data, isLoading, error } = useGetOrdersByAdminQuery();
@@ -70,6 +71,10 @@ const ListOfOrders = () => {
     {
       name: "totalAmount",
       selector: (row) => row?.totalAmount,
+    },
+    {
+      name: "Dikonfirmasi",
+      selector: (row) => row?.isConfirmedByUser,
     },
     {
       name: "Date",
@@ -149,16 +154,20 @@ const ListOfOrders = () => {
               Daftar Pesanan: {data?.orders?.length}
             </h2>
 
-            {/* Export to csv button */}
-            {data?.orders ? (
-              <ExportCSVButton
-                data={ordersData}
-                headers={headers}
-                filename={"Data Pesanan Farhani Florist"}
-              />
-            ) : (
-              <></>
-            )}
+            <div className="export-btn flex gap-4 items-center">
+              <ExportPDFButton link={"/admin/orders/report"} />
+
+              {/* Export to csv button */}
+              {data?.orders ? (
+                <ExportCSVButton
+                  data={ordersData}
+                  headers={headers}
+                  filename={"Data Pesanan Farhani Florist"}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
 
           <DataTable

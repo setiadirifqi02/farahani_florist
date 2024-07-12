@@ -15,6 +15,7 @@ import {
   useDeleteUserByAdminMutation,
   useGetAllUsersByAdminQuery,
 } from "../../redux/api/userApi";
+import ExportPDFButton from "../atoms/ExportPDFButton";
 
 const ListOfUsers = () => {
   const { data, isLoading, error } = useGetAllUsersByAdminQuery();
@@ -76,7 +77,7 @@ const ListOfUsers = () => {
             className="text-white"
             showArrow={true}
             color="primary"
-            content="Eidit Order"
+            content="Edit Order"
           >
             <Link to={`/admin/users/${row?._id}`} className="btn btn-primary">
               <PencilIcon className="h-4 text-green-500 " />
@@ -119,17 +120,21 @@ const ListOfUsers = () => {
               Daftar Pengguna: {data?.users?.length}
             </h2>
 
-            {/* Export to csv button */}
-            {data?.users ? (
-              <ExportCSVButton
-                data={data?.users}
-                headers={headers}
-                filename={"Data Pengguna Farhani Florist"}
-              />
-            ) : (
-              <></>
-            )}
+            <div className="export-btn flex gap-4 items-center">
+              <ExportPDFButton link={"/admin/users/report"} />
+              {/* Export to csv button */}
+              {data?.users ? (
+                <ExportCSVButton
+                  data={data?.users}
+                  headers={headers}
+                  filename={"Data Pengguna Farhani Florist"}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
+
           <DataTable
             className="font-poppins"
             columns={columns}

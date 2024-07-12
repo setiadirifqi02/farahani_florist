@@ -32,7 +32,7 @@ export default function SalesChart({ salesData }) {
     plugins: {
       title: {
         display: true,
-        text: "Data Sales & Pesanan",
+        text: "Data Penjualan & Pesanan",
       },
     },
     scales: {
