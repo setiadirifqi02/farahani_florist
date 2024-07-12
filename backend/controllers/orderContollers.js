@@ -1,5 +1,4 @@
 import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
-import order from "../models/order.js";
 import Order from "../models/order.js";
 import Product from "../models/product.js";
 import ErrorHandler from "../utlis/errorHandler.js";
@@ -437,6 +436,55 @@ async function getSalesData(startDate, endDate) {
     numOfOrders: (salesMap.get(date) || { numOfOrders: 0 }).numOfOrders,
   }));
 
+  const topProducts = await Order.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
+        },
+      },
+    },
+    // Unwind orderItems array
+    { $unwind: "$orderItems" },
+    // Group by product and calculate the total quantity ordered for each product
+    {
+      $group: {
+        _id: "$orderItems.product",
+        totalQuantity: { $sum: "$orderItems.quantity" },
+      },
+    },
+    // Sort by totalQuantity in descending order
+    { $sort: { totalQuantity: -1 } },
+    // Limit the result to top 3 products
+    { $limit: 5 },
+    // Lookup product details from Product collection
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "productDetails",
+      },
+    },
+    // Unwind the productDetails array
+    { $unwind: "$productDetails" },
+    // Project the desired fields
+    {
+      $project: {
+        _id: 0,
+        productId: "$_id",
+        name: "$productDetails.name",
+        totalQuantity: 1,
+        price: "$productDetails.price",
+        description: "$productDetails.description",
+        images: "$productDetails.images",
+        category: "$productDetails.category",
+        color: "$productDetails.color",
+      },
+    },
+  ]);
+
   /*
   console.log(
     "Completed order :",
@@ -482,6 +530,7 @@ async function getSalesData(startDate, endDate) {
     numOfCodSales,
     totalOnlinePaymentSales,
     numOfOnlinePaymentSales,
+    topProducts,
   };
 }
 
@@ -521,6 +570,7 @@ export const getSalesByAdmin = catchAsyncErrors(async (req, res, next) => {
     numOfCodSales,
     totalOnlinePaymentSales,
     numOfOnlinePaymentSales,
+    topProducts,
   } = await getSalesData(startDate, endDate);
 
   res.status(200).json({
@@ -538,5 +588,6 @@ export const getSalesByAdmin = catchAsyncErrors(async (req, res, next) => {
     numOfCodSales,
     totalOnlinePaymentSales,
     numOfOnlinePaymentSales,
+    topProducts,
   });
 });
