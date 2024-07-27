@@ -81,6 +81,7 @@ const Dashboard = () => {
     {
       name: "Metode Transakai",
       selector: (row) => row?.paymentMethod,
+      width: "170px",
       wrap: true,
     },
     {
@@ -96,7 +97,7 @@ const Dashboard = () => {
       wrap: true,
     },
     {
-      name: "Action",
+      name: "Aksi",
       cell: (row) => (
         <div className="flex gap-1">
           <Tooltip
@@ -155,7 +156,7 @@ const Dashboard = () => {
           {/* Date input */}
           <div className="flex flex-col w-[360px] md:w-full md:flex-row  md:items-center gap-2 mb-5 ">
             <div className="flex flex-col">
-              <label className="subTitle">Start Date</label>
+              <label className="subTitle">Tanggal Awal</label>
               <DatePicker
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
@@ -166,7 +167,7 @@ const Dashboard = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label className="subTitle">End Date</label>
+              <label className="subTitle">Tanggal Akhir</label>
               <DatePicker
                 selected={endDate}
                 onChange={(date) => setEndDate(date)}

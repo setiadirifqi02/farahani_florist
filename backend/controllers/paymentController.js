@@ -49,34 +49,34 @@ export const createPayment = catchAsyncErrors(async (req, res, next) => {
       phone: shippingInfo?.phoneNo,
       country_code: "IDN",
     },
-    enabled_payments: ["permata_va", "bca_va", "bni_va", "bri_va", "cimb_va"],
-    bca_va: {
-      va_number: "12345678911",
-      sub_company_code: "00000",
-      free_text: {
-        inquiry: [
-          {
-            en: "text in English",
-            id: "text in Bahasa Indonesia",
-          },
-        ],
-        payment: [
-          {
-            en: "text in English",
-            id: "text in Bahasa Indonesia",
-          },
-        ],
-      },
-    },
-    bni_va: {
-      va_number: "12345678",
-    },
-    bri_va: {
-      va_number: "1234567891234",
-    },
-    cimb_va: {
-      va_number: "1234567891234567",
-    },
+    // enabled_payments: ["permata_va", "bca_va", "bni_va", "bri_va", "cimb_va"],
+    // bca_va: {
+    //   va_number: "12345678911",
+    //   sub_company_code: "00000",
+    //   free_text: {
+    //     inquiry: [
+    //       {
+    //         en: "text in English",
+    //         id: "text in Bahasa Indonesia",
+    //       },
+    //     ],
+    //     payment: [
+    //       {
+    //         en: "text in English",
+    //         id: "text in Bahasa Indonesia",
+    //       },
+    //     ],
+    //   },
+    // },
+    // bni_va: {
+    //   va_number: "12345678",
+    // },
+    // bri_va: {
+    //   va_number: "1234567891234",
+    // },
+    // cimb_va: {
+    //   va_number: "1234567891234567",
+    // },
     // callbacks: {
     //   finish: `${process.env.FRONTEND_URL}/me/orders`,
     //   error: `${process.env.FRONTEND_URL}/me/orders`,

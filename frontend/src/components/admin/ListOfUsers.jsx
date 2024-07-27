@@ -70,7 +70,7 @@ const ListOfUsers = () => {
       width: "80px",
     },
     {
-      name: "Action",
+      name: "Aksi",
       cell: (row) => (
         <div className="flex gap-1">
           <Tooltip

@@ -225,7 +225,7 @@ const Cart = () => {
               className="text-white mt-5"
               onClick={checkOutHandler}
             >
-              Check Out
+              Proses Pembelian
             </Button>
           </div>
         </div>

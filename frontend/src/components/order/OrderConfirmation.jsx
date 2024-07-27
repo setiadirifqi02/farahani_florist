@@ -20,7 +20,6 @@ import MetaData from "../layout/MetaData";
 
 import {
   useConfirmedOrderByUserMutation,
-  useMyOrdersQuery,
   useOrdersConfirmationQuery,
 } from "../../redux/api/orderApi";
 import { useDispatch } from "react-redux";
@@ -47,7 +46,7 @@ const OrderConfirmation = () => {
   };
 
   const orderConfirmationHandler = () => {
-    console.log(orderId);
+    // console.log(orderId);
 
     const id = orderId;
     const data = { isConfirmedByUser: "Dikonfirmasi" };
@@ -108,7 +107,7 @@ const OrderConfirmation = () => {
       selector: (row) => row.isConfirmedByUser,
     },
     {
-      name: "Action",
+      name: "Aksi",
       cell: (row) => (
         <div className="flex gap-1">
           <Tooltip
@@ -121,19 +120,21 @@ const OrderConfirmation = () => {
               <EyeIcon className="h-4 text-green-500 " />
             </Link>
           </Tooltip>
-          <Tooltip
-            className="text-white"
-            showArrow={true}
-            color="primary"
-            content="Konfirmasi pesanan"
-          >
-            <Link
-              onClick={() => handleOpen(row?._id)}
-              className="btn btn-success ms-2"
+          {row?.orderStatus === "Terkirim" && (
+            <Tooltip
+              className="text-white"
+              showArrow={true}
+              color="primary"
+              content="Konfirmasi pesanan"
             >
-              <CheckIcon className="h-4 text-green-500 " />
-            </Link>
-          </Tooltip>
+              <Link
+                onClick={() => handleOpen(row?._id)}
+                className="btn btn-success ms-2"
+              >
+                <CheckIcon className="h-4 text-green-500 " />
+              </Link>
+            </Tooltip>
+          )}
         </div>
       ),
     },

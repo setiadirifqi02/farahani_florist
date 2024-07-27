@@ -2,6 +2,7 @@ import {
   PlusIcon,
   MinusIcon,
   ShoppingBagIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/solid";
 
 import StarRatings from "react-star-ratings";
@@ -10,7 +11,7 @@ import { toast } from "react-hot-toast";
 import { Button, Input, Spinner } from "@nextui-org/react";
 import { useGetProductsDetailsQuery } from "../../redux/api/productsApi";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import MetaData from "../layout/MetaData";
@@ -21,10 +22,12 @@ import ListReviews from "../review/ListReviews";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItem } from "../../redux/features/cartSlice";
+import { rupiahConverter } from "../../helpers/rupiahConverter";
 
 const ProductDetails = () => {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [quantity, setQuantity] = useState(1);
   const { data, isLoading, error, isError } = useGetProductsDetailsQuery(
@@ -81,6 +84,22 @@ const ProductDetails = () => {
     toast.success("Produk ditambahkan ke keranjang");
   };
 
+  const setItemToCheckout = () => {
+    const cartItem = {
+      product: product?._id,
+      name: product?.name,
+      color: product?.color,
+      price: product?.price,
+      image: product?.images[0]?.url,
+      stock: product?.stock,
+      quantity,
+    };
+
+    dispatch(setCartItem(cartItem));
+    navigate("/shipping");
+    toast.success("Berhasil ke proses pembelian");
+  };
+
   if (isLoading) return <Spinner color="primary" />;
 
   if (error && error?.status === 404) {
@@ -126,13 +145,13 @@ const ProductDetails = () => {
               </h2>
               <h2
                 className={`subHeadingTitle font-poppins ${
-                  product?.stock > 0 ? "text-gray-500" : "text-red-400"
+                  product?.stock > 0 ? "text-green-500" : "text-red-400"
                 }`}
               >
-                {product?.stock > 0 ? "In Stock" : "Out of Stock"}
+                {product?.stock > 0 ? "Tersedia" : "Stok Kosong"}
               </h2>
             </div>
-            <div className="flex mt-[-18px] py-2 items-end">
+            <div className="flex mt-[-12px] py-2 md:mt-1 items-end">
               <StarRatings
                 rating={product?.ratings}
                 starRatedColor="#eab308"
@@ -151,7 +170,7 @@ const ProductDetails = () => {
             <p className="paragraphDetail">{product?.description}</p>
             <h2 className="subTitle">Harga</h2>
             <h2 className="subHeadingTitle text-green-500 font-lora">
-              Rp. {product?.price}
+              {rupiahConverter(product?.price)}
             </h2>
             {isAuthenticated ? (
               <div>
@@ -190,11 +209,22 @@ const ProductDetails = () => {
                   size="lg"
                   color="primary"
                   className="my-5 text-white font-poppins"
-                  startContent={<ShoppingBagIcon className="h-5" />}
+                  startContent={<ShoppingCartIcon className="h-5" />}
                   disabled={product?.stock <= 0}
                   onClick={setItemToCart}
                 >
                   + Keranjang
+                </Button>
+                <Button
+                  radius="full"
+                  size="lg"
+                  color="primary"
+                  className="my-5 ml-3 text-white font-poppins"
+                  startContent={<ShoppingBagIcon className="h-5" />}
+                  disabled={product?.stock <= 0}
+                  onClick={setItemToCheckout}
+                >
+                  Beli
                 </Button>
               </div>
             ) : (
@@ -210,8 +240,8 @@ const ProductDetails = () => {
             ) : (
               <>
                 <h2 className="subTitle">Ulasan</h2>
-                <div className="bg-red-200 p-5 rounded-xl mt-5">
-                  Login to post your review
+                <div className="bg-red-200 p-5 rounded-xl mt-5 font-poppins">
+                  Masuk untuk menulis ulasan atau belanja
                 </div>
               </>
             )}

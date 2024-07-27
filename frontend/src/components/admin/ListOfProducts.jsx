@@ -2,8 +2,13 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 
-import { Spinner, Tooltip } from "@nextui-org/react";
-import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { Button, Spinner, Tooltip } from "@nextui-org/react";
+import {
+  PencilIcon,
+  PhotoIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import toast from "react-hot-toast";
 
 import AdminLayout from "../layout/AdminLayout";
@@ -61,24 +66,24 @@ const ListOfProducts = () => {
       width: "200px",
     },
     {
-      name: "Stock",
+      name: "Stok",
       selector: (row) => row.stock,
       sortable: true,
       width: "100px",
     },
     {
-      name: "Input by",
+      name: "Input Oleh",
       selector: (row) => row?.user?.email,
       width: "200px",
     },
     {
-      name: "Date",
+      name: "Tanggal",
       selector: (row) => showFormattedDate(row?.updatedAt),
       width: "200px",
     },
 
     {
-      name: "Action",
+      name: "Aksi",
       cell: (row) => (
         <div className="flex gap-1">
           <Tooltip
@@ -143,6 +148,17 @@ const ListOfProducts = () => {
       <MetaData title="Daftar produk" />
       <AdminLayout>
         <div className="list-product___page flex flex-col overflow-scroll lg:overflow-scroll">
+          <div className="flex justify-end w-full mb-5">
+            <Button
+              as={Link}
+              to="/admin/product/new"
+              color="primary"
+              className="font-poppins text-white"
+              startContent={<PlusCircleIcon className="h-5 text-white" />}
+            >
+              Tambah Produk{" "}
+            </Button>
+          </div>
           <div className="flex flex-col md:flex-row w-full justify-between md:items-center lg:pr-2">
             <h2 className="subHeadingTitle capitalize py-3">
               Daftar Produk: {data?.products?.length}

@@ -10,7 +10,7 @@ import {
 } from "@nextui-org/react";
 import { rupiahConverter } from "../../helpers/rupiahConverter.js";
 
-const ProductsItem = ({ products }) => {
+const TopProductsItem = ({ products }) => {
   return (
     <Card className="product-item__container py-4" shadow="none" isPressable>
       <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
@@ -47,6 +47,9 @@ const ProductsItem = ({ products }) => {
             ({products?.numOfReviews})
           </span>
         </div>
+        <small className="text-[12px] text-gray-400 font-poppins">
+          {`Terjual ${products?.totalQuantity}`}
+        </small>
         <div className="flex flex-col lg:flex-row justify-between items-start mt-2 md:mt-5">
           <div className="flex flex-col">
             <small className="font-bold text-gray-400 font-poppins">
@@ -62,7 +65,7 @@ const ProductsItem = ({ products }) => {
             className="text-white font-poppins w-full lg:w-24  mt-2"
             id="view_btn"
             as={routerLink}
-            to={`/products/${products?._id}`}
+            to={`/products/${products?.productId}`}
           >
             Lihat Detail
           </Button>
@@ -71,4 +74,4 @@ const ProductsItem = ({ products }) => {
     </Card>
   );
 };
-export default ProductsItem;
+export default TopProductsItem;

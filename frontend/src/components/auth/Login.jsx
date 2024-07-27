@@ -112,7 +112,7 @@ const Login = () => {
                 className="text-white w-full"
                 disabled={isLoading}
               >
-                {isLoading ? "Loading..." : "Login"}
+                {isLoading ? "Loading..." : "Masuk"}
               </Button>
               <div className="flex text-xs font-poppins mt-5 gap-1">
                 <p>Belum punya Akun?</p>

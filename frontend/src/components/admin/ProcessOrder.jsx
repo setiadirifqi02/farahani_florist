@@ -90,17 +90,17 @@ const ProcessOrder = () => {
               selectedKeys={[status]}
               onChange={handleSelectionChange}
             >
-              <SelectItem key="Processing" value="Processing">
-                Processing
+              <SelectItem key="Diproses" value="Diproses">
+                Diproses
               </SelectItem>
-              <SelectItem key="Shipped" value="Shipped">
-                Shipped
+              <SelectItem key="Dikirim" value="Dikirim">
+                Dikirim
               </SelectItem>
-              <SelectItem key="Delivered" value="Delivered">
-                Delivered
+              <SelectItem key="Terkirim" value="Terkirim">
+                Terkirim
               </SelectItem>
-              <SelectItem key="Cancel" value="Cancel">
-                Cancel
+              <SelectItem key="Dibatalkan" value="Dibatalkan">
+                Dibatalkan
               </SelectItem>
             </Select>
             <Button
@@ -154,7 +154,7 @@ const ProcessOrder = () => {
                 <TableCell className=" font-semibold">Status</TableCell>
                 <TableCell
                   className={
-                    String(orderStatus).includes("Delivered")
+                    String(orderStatus).includes("Terkirim")
                       ? "text-green-500"
                       : "text-red-400"
                   }

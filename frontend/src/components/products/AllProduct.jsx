@@ -1,10 +1,14 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import {
+  Link as routerLink,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 
 import { useGetProductsQuery } from "../../redux/api/productsApi";
 import { toast } from "react-hot-toast";
 
-import { Spinner } from "@nextui-org/react";
+import { Spinner, Tab, Tabs } from "@nextui-org/react";
 
 import Filter from "../atoms/Filter";
 import SearchBar from "../atoms/SearchBar";
@@ -15,6 +19,7 @@ import MetaData from "../layout/MetaData";
 
 const AllProduct = () => {
   let [searchParams] = useSearchParams();
+  const { pathname } = useLocation();
 
   const page = Number(searchParams.get("page")) || 1;
   const keyword = searchParams.get("keyword") || "";
@@ -74,7 +79,35 @@ const AllProduct = () => {
             className="filter flex flex-row justify-between
            w-full items-center px-6 md:p-5"
           >
-            <h2 className="subHeadingTitle">Semua Produk </h2>
+            <Tabs
+              variant="underlined"
+              selectedKey={pathname}
+              arial-label="tabs of product"
+              className="font-poppins font-semibold text-lg"
+            >
+              <Tab
+                id="/all_products"
+                title="Semua Produk"
+                as={routerLink}
+                to={"/all_products"}
+                className={
+                  pathname === "/all_products"
+                    ? "border-b-3 border-green-500"
+                    : ""
+                }
+              />
+              <Tab
+                id="/top_products"
+                title="Produk Terlaris"
+                as={routerLink}
+                to={"/top_products"}
+                className={
+                  pathname === "/top_products"
+                    ? "border-b-3 border-green-500"
+                    : ""
+                }
+              />
+            </Tabs>
             <Filter />
           </div>
           <div className="grid grid-cols-2 px-2 lg:grid-cols-4">

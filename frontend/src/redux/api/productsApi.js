@@ -24,6 +24,12 @@ export const productApi = createApi({
       }),
       providesTags: ["Product"],
     }),
+    getTopProducts: builder.query({
+      query: () => ({
+        url: "/top_products",
+      }),
+      providesTags: ["Product"],
+    }),
     submitReview: builder.mutation({
       query(body) {
         return {
@@ -120,4 +126,5 @@ export const {
   useLazyGetReviewByAdminQuery,
   useGetReviewByAdminQuery,
   useDeleteProductReviewMutation,
+  useGetTopProductsQuery,
 } = productApi;

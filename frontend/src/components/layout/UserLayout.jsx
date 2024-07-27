@@ -18,7 +18,7 @@ const UserLayout = ({ children }) => {
   return (
     <div className="user___layout p-4 md:content flex flex-col  w-full md:min-w-[800px] lg:max-w-[800px]">
       <h1 className="headingTitle text-default-600 text-center">
-        User Setting
+        Pengaturan Profil
       </h1>
       <div className="user-info__layout flex w-full items-center  gap-4 md:p-5 mt-10 mb-5">
         <Avatar
@@ -39,7 +39,7 @@ const UserLayout = ({ children }) => {
       </div>
       <div className="user-main___layout flex w-full flex-col md:flex-row">
         <div className="side-bar__container md:w-2/6 mb-5">
-          <div className="hidden md:block">
+          <div className="hidden md:block sticky top-28">
             <Sidebar />
           </div>
           <div className="block md:hidden mb-4">

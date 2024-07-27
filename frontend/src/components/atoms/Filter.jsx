@@ -16,8 +16,13 @@ import StarRatings from "react-star-ratings";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { PRODUCT_CATEGORIES } from "../../constants/constants.js";
+import {
+  PRICE_FILTER_MAX,
+  PRICE_FILTER_MIN,
+  PRODUCT_CATEGORIES,
+} from "../../constants/constants.js";
 import { getPricequeryParams } from "../../helpers/helpers.js";
+import { rupiahConverter } from "../../helpers/rupiahConverter";
 
 const Filter = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -86,6 +91,8 @@ const Filter = () => {
     navigate("/all_products");
   };
 
+  // const minHarga = [400, 2000];
+
   return (
     <div className="filter___container">
       <Button
@@ -112,36 +119,44 @@ const Filter = () => {
               <ModalBody>
                 {/* Price filter Section */}
                 <p className="subTitle mt-[-10px]">Harga</p>
-                <form
-                  className="price-filter flex flex-col gap-2"
-                  onSubmit={handlePriceFilter}
-                >
-                  <div className="flex gap-1">
-                    <Input
-                      type="text"
-                      label="min"
-                      size="sm"
-                      value={min}
-                      onChange={(e) => setMin(e.target.value)}
+                {PRICE_FILTER_MIN.map((price) => (
+                  <div className="form-check flex gap-3" key={price.label}>
+                    <input
+                      className="form-check-input accent-green-500 scale-150 rounded-xl"
+                      type="checkbox"
+                      name="max"
+                      id="check7"
+                      value={price.value}
+                      defaultChecked={defaultCheckHandler()}
+                      onClick={(e) => handleCategoryRatingFilter(e.target)}
                     />
-                    <Input
-                      type="text"
-                      label="max"
-                      size="sm"
-                      value={max}
-                      onChange={(e) => setMax(e.target.value)}
-                    />
-                  </div>
-                  <div className="flex ">
-                    <Button
-                      type="submit"
-                      color="primary"
-                      className="text-white font-poppins"
+                    <label
+                      className="form-check-label ml-2 font-poppins text-[12px]"
+                      htmlFor="check4"
                     >
-                      Go
-                    </Button>
+                      {price.label}
+                    </label>
                   </div>
-                </form>
+                ))}
+                {PRICE_FILTER_MAX.map((price) => (
+                  <div className="form-check flex gap-3" key={price.label}>
+                    <input
+                      className="form-check-input accent-green-500 scale-150 rounded-xl"
+                      type="checkbox"
+                      name="min"
+                      id="check7"
+                      value={price.value}
+                      defaultChecked={defaultCheckHandler()}
+                      onClick={(e) => handleCategoryRatingFilter(e.target)}
+                    />
+                    <label
+                      className="form-check-label ml-2 font-poppins text-[12px]"
+                      htmlFor="check4"
+                    >
+                      {price.label}
+                    </label>
+                  </div>
+                ))}
                 <Divider />
 
                 {/* Category filter Section */}
@@ -215,10 +230,10 @@ const Filter = () => {
                   className="text-white"
                   onClick={clearFilterHandler}
                 >
-                  Clear Filter
+                  Hapus Filter
                 </Button>
                 <Button color="danger" onPress={onClose}>
-                  Close
+                  Tutup
                 </Button>
               </ModalFooter>
             </>

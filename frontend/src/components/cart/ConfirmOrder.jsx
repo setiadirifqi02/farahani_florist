@@ -43,9 +43,9 @@ const ConfirmOrder = () => {
             <div className="flex gap-[86px] items-baseline">
               <h2 className="subTitle">Alamat</h2>
               <small className=" font-poppins font-semibold text-default-600">
-                {shippingInfo?.address}, {shippingInfo?.zipCode}, kab.{" "}
-                {shippingInfo?.city}, {shippingInfo?.province},{" "}
-                {shippingInfo?.country}
+                {shippingInfo?.address}, {shippingInfo?.zipCode}, Kec.
+                {shippingInfo?.district}, {shippingInfo?.city},
+                {shippingInfo?.province}, {shippingInfo?.country}
               </small>
             </div>
           </div>
@@ -85,7 +85,7 @@ const ConfirmOrder = () => {
 
         {/* Order Summary */}
         <div className="summary-cart flex flex-col w-full lg:w-2/6 p-3 md:p-5 bg-gray-50 lg:ml-5 rounded-xl sticky">
-          <h2 className="subHeadingTitle capitalize">Order Summary</h2>
+          <h2 className="subHeadingTitle capitalize">Ringkasan Pembelian</h2>
           <Divider className="mt-5" />
           <div className="flex justify-between items-baseline">
             <h2 className="subTitle">Subtotal</h2>

@@ -149,13 +149,14 @@ const PaymentMethod = () => {
                   value="online_payment"
                   onChange={(e) => setMethod("online_payment")}
                 >
-                  Online Payment
+                  Pembayaran Online
                 </Radio>
               </RadioGroup>
 
               <Button
                 type="submit"
                 radius="lg"
+                isDisabled={method ? false : true}
                 className="inline-flex items-center justify-center w-full 
                 px-12 py-4 mt-6 font-semibold text-white bg-green-500"
               >

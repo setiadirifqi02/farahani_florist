@@ -6,7 +6,6 @@ import {
   NavbarItem,
   NavbarMenuToggle,
   NavbarMenu,
-  NavbarMenuItem,
   Link,
   Button,
   Avatar,
@@ -27,7 +26,6 @@ import { useGetMeQuery } from "../../redux/api/userApi";
 import { useSelector } from "react-redux";
 import { useLazyLogoutQuery } from "../../redux/api/authApi";
 import { useOrdersConfirmationQuery } from "../../redux/api/orderApi";
-import OrderConfirmation from "../order/OrderConfirmation";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -128,7 +126,7 @@ const Header = () => {
                 aria-label="profile-info"
               >
                 <p className="font-semibold">
-                  Signed in
+                  Profil
                   <span className="capitalize text-green-500">
                     {" "}
                     {user?.user?.name}
@@ -153,7 +151,7 @@ const Header = () => {
                 to="/me/orders"
                 aria-label="orders"
               >
-                Orders
+                Pesanan
               </DropdownItem>
               <DropdownItem
                 key="orders_confirmation"
@@ -172,7 +170,7 @@ const Header = () => {
                   )
                 }
               >
-                Orders Confirmation
+                Konfirmasi Pesanan
               </DropdownItem>
               <DropdownItem
                 key="profileMe"
@@ -180,7 +178,7 @@ const Header = () => {
                 to="/me/profile"
                 aria-label="profile"
               >
-                Profile
+                Profil
               </DropdownItem>
               <DropdownItem
                 key="logout"
@@ -191,7 +189,7 @@ const Header = () => {
                 aria-label="logout"
                 onClick={logOutHandler}
               >
-                logout
+                Keluar
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
@@ -204,7 +202,7 @@ const Header = () => {
                 as={routerLink}
                 to="/login"
               >
-                Login
+                Masuk
               </Button>
             </NavbarItem>
           )

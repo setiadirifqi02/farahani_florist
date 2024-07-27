@@ -19,7 +19,7 @@ const AdminLayout = ({ children }) => {
   return (
     <div className="admin___layout p-4 md:content flex flex-col   w-full md:min-w-[800px] ">
       <h1 className="headingTitle text-default-600 text-center">
-        Admin Dashboard Setting
+        Menu Admin Dashboard
       </h1>
       <div className="admin-info__layout flex w-full items-center  gap-4 md:p-5 mt-10 mb-5">
         <Avatar
@@ -33,7 +33,7 @@ const AdminLayout = ({ children }) => {
         />
         <div className="flex flex-col">
           <h2 className="text-sm lg:text-lg font-poppins text-default-600 font-bold">
-            Manage dan Update toko
+            Kelola dan Update toko
           </h2>
           <p className="paragraphDetail text-green-500">
             {/* {user?.user?.name} */}
@@ -43,7 +43,7 @@ const AdminLayout = ({ children }) => {
       </div>
       <div className="admin-main___layout flex w-full flex-col md:flex-row">
         <div className="side-bar__container md:w-3/12 mb-5">
-          <div className="hidden md:block">
+          <div className="hidden md:block sticky top-28">
             <AdminSideBar />
           </div>
           <div className="block md:hidden mb-4">

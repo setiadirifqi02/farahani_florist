@@ -175,12 +175,12 @@ const SalesReport = () => {
         </div>
 
         {/* Top Products sales info table */}
-        <div className="flex flex-col mb-10">
+        <div className="flex flex-col">
           <TopProductsTable data={data?.topProducts} />
         </div>
 
         {/* More sales info table */}
-        <div className="flex flex-col mb-10">
+        <div className="flex flex-col">
           <SalesSummaryTable data={data} />
           <div className="flex p-3 justify-between font-poppins text-sm">
             <p>Total Penjualan </p>
@@ -207,7 +207,7 @@ const SalesReport = () => {
         />
 
         {/* Reports footer */}
-        <div className="reports-footer__container flex flex-col mt-10  font-poppins text-justify">
+        <div className="reports-footer__container flex flex-col mt-5  font-poppins text-justify">
           <p>
             Data dan informasi yang tercantum pada laporan ini merupakan data
             yang faktual dan sebenar-benarnya. Keakuratan data dan informasi
@@ -217,7 +217,7 @@ const SalesReport = () => {
 
           <div className="flex flex-col items-end mt-5 ">
             <p>Banyumas, {showFormattedDate(todayDate)}</p>
-            <div className="blank_signature h-24 md:h-40"></div>
+            <div className="blank_signature h-24"></div>
 
             <p className="text-center mr-20">{user?.user?.name}</p>
           </div>

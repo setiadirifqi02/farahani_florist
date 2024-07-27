@@ -112,7 +112,7 @@ export const updateOrderByAdmin = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("No order found with the ID"), 404);
   }
 
-  if (order?.orderStatus === "Delivered") {
+  if (order?.orderStatus === "Terkirim") {
     return next(new ErrorHandler("You have already delivered thid order"), 404);
   }
 
@@ -140,7 +140,7 @@ export const updateOrderByAdmin = catchAsyncErrors(async (req, res, next) => {
   order.orderStatus = req.body.status;
   order.deliveredAt = Date.now();
 
-  if (order.orderStatus === "Delivered") {
+  if (order.orderStatus === "Terkirim") {
     order.paymentInfo.status = "Dibayar";
   }
 
@@ -224,7 +224,7 @@ async function getSalesData(startDate, endDate) {
           $gte: new Date(startDate),
           $lte: new Date(endDate),
         },
-        orderStatus: "Delivered",
+        orderStatus: "Terkirim",
       },
     },
     {
@@ -264,7 +264,7 @@ async function getSalesData(startDate, endDate) {
           $gte: new Date(startDate),
           $lte: new Date(endDate),
         },
-        orderStatus: "Processing",
+        orderStatus: "Diproses",
       },
     },
     {
@@ -303,7 +303,7 @@ async function getSalesData(startDate, endDate) {
           $gte: new Date(startDate),
           $lte: new Date(endDate),
         },
-        orderStatus: "Cancel",
+        orderStatus: "Dibatalkan",
       },
     },
     {
@@ -588,6 +588,61 @@ export const getSalesByAdmin = catchAsyncErrors(async (req, res, next) => {
     numOfCodSales,
     totalOnlinePaymentSales,
     numOfOnlinePaymentSales,
+    topProducts,
+  });
+});
+
+async function getTopProduct() {
+  const topSalesProduct = await Order.aggregate([
+    // Unwind orderItems array
+    { $unwind: "$orderItems" },
+    // Group by product and calculate the total quantity ordered for each product
+    {
+      $group: {
+        _id: "$orderItems.product",
+        totalQuantity: { $sum: "$orderItems.quantity" },
+      },
+    },
+    // Sort by totalQuantity in descending order
+    { $sort: { totalQuantity: -1 } },
+    // Limit the result to top 3 products
+    { $limit: 5 },
+    // Lookup product details from Product collection
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "productDetails",
+      },
+    },
+    // Unwind the productDetails array
+    { $unwind: "$productDetails" },
+    // Project the desired fields
+    {
+      $project: {
+        _id: 0,
+        productId: "$_id",
+        name: "$productDetails.name",
+        totalQuantity: 1,
+        price: "$productDetails.price",
+        description: "$productDetails.description",
+        images: "$productDetails.images",
+        category: "$productDetails.category",
+        color: "$productDetails.color",
+        ratings: "$productDetails.ratings",
+        numOfReviews: "$productDetails.numOfReviews",
+      },
+    },
+  ]);
+
+  return topSalesProduct;
+}
+
+export const getTopSalesProduct = catchAsyncErrors(async (req, res, next) => {
+  const topProducts = await getTopProduct();
+
+  res.status(200).json({
     topProducts,
   });
 });

@@ -23,7 +23,7 @@ const SearchBar = () => {
         <input
           type="text"
           id="search_field"
-          placeholder="Search product here"
+          placeholder="Cari tanaman hias disini..."
           aria-label="serach_btn"
           name="keyword"
           value={keyword}

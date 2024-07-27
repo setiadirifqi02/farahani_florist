@@ -26,7 +26,7 @@ const OrderReport = () => {
     _id: item._id,
     payment_status: item.paymentInfo.status,
     orderStatus: item.orderStatus,
-    user: item.user.email,
+    user: item.email,
     totalAmount: `Rp.${item.totalAmount}`,
     paymentMethod: item.paymentMethod,
     city: item.shippingInfo.city,

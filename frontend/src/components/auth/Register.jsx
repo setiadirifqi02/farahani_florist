@@ -102,10 +102,9 @@ const Register = () => {
               className="w-[300px] md:w-full lg:max-w-md"
               endContent={<EnvelopeIcon className="h-4" />}
             />
-            <div className="flex w-full lg:max-w-md justify-between items-center">
-              <h2 className="subTitle mb-4">Password</h2>
-              <p className="text-xs font-poppins">Lupa password?</p>
-            </div>
+
+            <h2 className="subTitle mb-4">Password</h2>
+
             <Input
               label="Password"
               name="password"
@@ -136,7 +135,7 @@ const Register = () => {
                 className="text-white w-full"
                 disabled={isLoading}
               >
-                {isLoading ? "Register akun..." : "Register"}
+                {isLoading ? "Mendaftarkan akun..." : "Daftar"}
               </Button>
             </div>
           </form>

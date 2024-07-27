@@ -1,4 +1,15 @@
 export const PRODUCT_CATEGORIES = ["Bunga", "Daun", "Pohon", "Buah", "Akar"];
+export const PRICE_FILTER_MIN = [
+  { label: "Kurang dari Rp.10.000,-", value: 10000 },
+  { label: "Kurang dari Rp.20.000,-", value: 20000 },
+  { label: "Kurang dari Rp.50.000,-", value: 50000 },
+  { label: "Kurang dari Rp.100.000,-", value: 100000 },
+];
+export const PRICE_FILTER_MAX = [
+  { label: "Lebih dari Rp.100.000,-", value: 100001 },
+  { label: "Lebih dari Rp.500.000,-", value: 500001 },
+  { label: "Lebih dari Rp.1000.000,-", value: 1000001 },
+];
 
 export const categoryOfPlants = [
   {
@@ -81,8 +92,8 @@ export const adminSettingMenu = [
 ];
 
 export const navMenuItem = [
-  { label: "Home", link: "/" },
-  { label: "Semua Produk", link: "/all_products" },
+  { label: "Beranda", link: "/" },
+  { label: "Produk", link: "/all_products" },
   { label: "Tentang Kami", link: "/about_us" },
 ];
 

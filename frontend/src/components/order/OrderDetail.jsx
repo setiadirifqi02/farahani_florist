@@ -86,7 +86,7 @@ const OrderDetail = () => {
               <TableCell className=" font-semibold">Status</TableCell>
               <TableCell
                 className={
-                  String(orderStatus).includes("Delivered")
+                  String(orderStatus).includes("Terkirim")
                     ? "text-green-500"
                     : "text-red-400"
                 }

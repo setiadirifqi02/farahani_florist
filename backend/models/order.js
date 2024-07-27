@@ -15,6 +15,10 @@ const orderSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+      district: {
+        type: String,
+        required: true,
+      },
       phoneNo: {
         type: String,
         required: true,
@@ -92,10 +96,10 @@ const orderSchema = new mongoose.Schema(
     orderStatus: {
       type: String,
       enum: {
-        values: ["Processing", "Shipped", "Delivered", "Cancel"],
+        values: ["Diproses", "Dikirim", "Terkirim", "Dibatalkan"],
         message: "Silahkan pilih status pesanan",
       },
-      default: "Processing",
+      default: "Diproses",
     },
     deliveredAt: Date,
     isConfirmedByUser: {

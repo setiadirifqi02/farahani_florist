@@ -69,7 +69,7 @@ const ListOfOrders = () => {
       width: "220px",
     },
     {
-      name: "totalAmount",
+      name: "Total",
       selector: (row) => row?.totalAmount,
     },
     {
@@ -77,13 +77,13 @@ const ListOfOrders = () => {
       selector: (row) => row?.isConfirmedByUser,
     },
     {
-      name: "Date",
+      name: "Tanggal",
       selector: (row) => showFormattedDate(row?.updatedAt),
       sortable: true,
     },
 
     {
-      name: "Action",
+      name: "Aksi",
       cell: (row) => (
         <div className="flex gap-1">
           <Tooltip
@@ -119,7 +119,7 @@ const ListOfOrders = () => {
     _id: item._id,
     payment_status: item.paymentInfo.status,
     orderStatus: item.orderStatus,
-    user: item.user.email,
+    user: item.user,
     totalAmount: `Rp.${item.totalAmount}`,
     paymentMethod: item.paymentMethod,
     city: item.shippingInfo.city,

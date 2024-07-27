@@ -23,12 +23,14 @@ import UpdatePassword from "../user/UpdatePassword";
 import UpdateProfile from "../user/UpdateProfile";
 import UploadAvatar from "../user/UploadAvatar";
 import OrderConfirmation from "../order/OrderConfirmation";
+import TopProduct from "../products/TopProduct";
 
 const userRoutes = () => {
   return (
     <>
       <Route path="/" element={<Home />} />
       <Route path="/all_products" element={<AllProduct />} />
+      <Route path="/top_products" element={<TopProduct />} />
       <Route path="/products/:id" element={<ProductDetails />} />
 
       <Route path="/login" element={<Login />} />

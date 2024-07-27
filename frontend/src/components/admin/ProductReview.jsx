@@ -57,6 +57,8 @@ const ProductReview = () => {
     {
       name: "ID",
       selector: (row) => row?._id,
+      width: "230px",
+      wrap: true,
     },
     {
       name: "Rating",
@@ -65,19 +67,24 @@ const ProductReview = () => {
     {
       name: "Ulasan",
       selector: (row) => row?.comment,
+      width: "230px",
     },
 
     {
       name: "User",
       selector: (row) => row?.user?.name,
+      width: "230px",
+      wrap: true,
     },
     {
       name: "Email",
       selector: (row) => row?.user?.email,
+      width: "230px",
+      wrap: true,
     },
 
     {
-      name: "Action",
+      name: "Aksi",
       cell: (row) => (
         <div className="flex gap-1">
           <Tooltip

@@ -7,6 +7,7 @@ import {
   getCurrentUserOrder,
   getOrderDetails,
   getSalesByAdmin,
+  getTopSalesProduct,
   getUnconfirmUserOrder,
   updateOrderByAdmin,
 } from "../controllers/orderContollers.js";
@@ -17,6 +18,7 @@ const router = express.Router();
 router.route("/orders/new").post(isAuthenticatedUser, createNewOrder);
 router.route("/orders/:id").get(isAuthenticatedUser, getOrderDetails);
 router.route("/me/orders").get(isAuthenticatedUser, getCurrentUserOrder);
+router.route("/top_products").get(getTopSalesProduct);
 router
   .route("/me/orders_confirmation")
   .get(isAuthenticatedUser, getUnconfirmUserOrder);

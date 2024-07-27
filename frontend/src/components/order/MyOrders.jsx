@@ -67,7 +67,7 @@ const MyOrders = () => {
       selector: (row) => row.isConfirmedByUser,
     },
     {
-      name: "Action",
+      name: "Aksi",
       cell: (row) => (
         <div className="flex gap-1">
           <Tooltip
